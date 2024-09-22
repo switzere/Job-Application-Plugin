@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Job Application Recorder</title>
+  <style>
+    body { font-family: Arial, sans-serif; }
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+  <h1 id="statusMessage">Recording Job Application...</h1>
+  <div id="jobDetails" style="display: none;">
+    <div class="header-container">
+      <h2>Job Details</h2>
+      <button id="confirmButton">Confirm</button>
+    </div>
+    <p><strong>Job Title:</strong> <textarea id="jobTitle" type="text"></textarea></p>
+    <p><strong>Company Info:</strong> <textarea id="companyInfo" type="text"></textarea></p>
+    <p><strong>Website URL:</strong> <textarea id="websiteURL" type="text"></textarea></p>
+    <p><strong>Job Description:</strong> <textarea id="jobDescription"></textarea></p>
+    <p><strong>Posting Source:</strong> <textarea id="postingSource" type="text"></textarea></p>
+  </div>
+  <pre id="fileContent"></pre>
+  <script src="popup.js"></script>
+</body>
+</html>
