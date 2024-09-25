@@ -21,7 +21,7 @@ def import_json_files():
     json_files = glob.glob(os.path.join(downloads_folder, "job_app_details_*.json"))
 
     for file in json_files:
-        with open(file, 'r') as f:
+        with open(file, 'r', encoding='utf-8') as f:
             job_details = json.load(f)
             add_job(
                 job_details['jobTitle'],
