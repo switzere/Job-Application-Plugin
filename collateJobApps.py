@@ -7,7 +7,7 @@ import csv
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from collections import Counter
-from datetime import datetime
+from datetime import datetime, timedelta
 
 # Initialize the main window
 root = tk.Tk()
@@ -51,15 +51,28 @@ def add_job(job_title, company_info, url, job_description, notes, stage, posting
     #messagebox.showinfo("Success", "Job application added successfully.")
     #load_jobs()
 
-
 # Function to load job applications from the CSV file
 def load_jobs():
     for row in job_list.get_children():
         job_list.delete(row)
+    updated_rows = []
     with open(csv_file_path, 'r', newline='', encoding='utf-8') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
+            # Check if the job has been in the "Applied" stage for over 30 days
+            if row["stage"] == "Applied":
+                timestamp = datetime.strptime(row["timestamp"], "%Y-%m-%dT%H:%M:%S.%f")
+                if datetime.now() - timestamp > timedelta(days=30):
+                    row["stage"] = "Ghosted"
+            updated_rows.append(row)
             job_list.insert("", "end", values=(row["jobTitle"], row["companyInfo"], row["url"], row["jobDescription"], row["timestamp"], row["notes"], row["stage"], row["postingSource"]))
+    
+    # Write the updated rows back to the CSV file
+    with open(csv_file_path, 'w', newline='', encoding='utf-8') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=["jobTitle", "companyInfo", "url", "jobDescription", "timestamp", "notes", "stage", "postingSource"])
+        writer.writeheader()
+        writer.writerows(updated_rows)
+    
     update_graphs()
 
 # Function to add a note to a job application
@@ -149,6 +162,11 @@ def update_graphs():
     ax_posting_source.set_title('Job Applications by Posting Source')
     canvas_posting_source.draw()
 
+# Function to update the job list and graphs
+def update_all():
+    import_json_files()
+    load_jobs()
+
 # Create and place the job list
 columns = ("jobTitle", "companyInfo", "url", "jobDescription", "timestamp", "notes", "stage", "postingSource")
 job_list = ttk.Treeview(root, columns=columns, show="headings")
@@ -165,24 +183,27 @@ tk.Button(root, text="Add Note", command=add_note_to_job).grid(row=2, column=0, 
 
 # Create and place the stage entry
 tk.Label(root, text="Update Stage").grid(row=3, column=0)
-stage_combobox_update = ttk.Combobox(root, values=["Applied", "Rejected", "Interview 1", "Interview 2"])
+stage_combobox_update = ttk.Combobox(root, values=["Applied", "Rejected", "Interview 1", "Interview 2", "Ghosted"])
 stage_combobox_update.grid(row=3, column=1)
 stage_combobox_update.set("Applied")  # Set default value
 
 tk.Button(root, text="Update Stage", command=update_stage).grid(row=4, column=0, columnspan=2)
 
+# Create and place the update button
+tk.Button(root, text="Update", command=update_all).grid(row=5, column=0, columnspan=2)
+
 # Create matplotlib figures and embed them in the Tkinter window
 fig_stage = plt.Figure(figsize=(5, 4), dpi=100)
 canvas_stage = FigureCanvasTkAgg(fig_stage, master=root)
-canvas_stage.get_tk_widget().grid(row=5, column=0)
+canvas_stage.get_tk_widget().grid(row=6, column=0)
 
 fig_date = plt.Figure(figsize=(5, 4), dpi=100)
 canvas_date = FigureCanvasTkAgg(fig_date, master=root)
-canvas_date.get_tk_widget().grid(row=5, column=1)
+canvas_date.get_tk_widget().grid(row=6, column=1)
 
 fig_posting_source = plt.Figure(figsize=(5, 4), dpi=100)
 canvas_posting_source = FigureCanvasTkAgg(fig_posting_source, master=root)
-canvas_posting_source.get_tk_widget().grid(row=5, column=2)
+canvas_posting_source.get_tk_widget().grid(row=6, column=2)
 
 # import any new jobs
 import_json_files()
