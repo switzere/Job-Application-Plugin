@@ -1,9 +1,12 @@
 export function extractIndeedDetails() {
-    const jobTitleElement = document.querySelector('.jobsearch-JobInfoHeader-title-container');
+    let jobTitleElement = document.querySelector('.jobsearch-JobInfoHeader-title-container');
+    if (!jobTitleElement) {
+        jobTitleElement = document.querySelector('[data-testid="jobDetailTitle"]');
+    }
     let jobTitle = jobTitleElement ? jobTitleElement.innerText : 'Job Title Not Found';
 
     //if " - job post" in jobTitle, remove it
-    const jobTitleIndex = jobTitle.indexOf('\n- job post');
+    let jobTitleIndex = jobTitle.indexOf('\n- job post');
     if (jobTitleIndex !== -1) {
         console.log(jobTitle)
         jobTitle = jobTitle.substring(0, jobTitleIndex);
@@ -12,10 +15,16 @@ export function extractIndeedDetails() {
     const locationElement = document.querySelector('[data-testid="job-location"]');
     const location = locationElement ? locationElement.innerText : 'Location Not Found';
 
-    const companyInfoElement = document.querySelector('[data-testid="jobsearch-CompanyInfoContainer"]');
+    let companyInfoElement = document.querySelector('[data-testid="jobsearch-CompanyInfoContainer"]');
+    if (!companyInfoElement) {
+        companyInfoElement = document.querySelector('[data-testid="jobDetailSubtitle"]');
+    }
     const companyInfo = companyInfoElement ? companyInfoElement.innerText : 'Company Info Not Found';
 
-    const jobDescriptionElement = document.querySelector('#jobDescriptionText');
+    let jobDescriptionElement = document.querySelector('#jobDescriptionText');
+    if (!jobDescriptionElement) {
+        jobDescriptionElement = document.querySelector('[data-testid="jobDetailDescription"]');
+    }
     const jobDescription = jobDescriptionElement ? jobDescriptionElement.innerText : 'Job Description Not Found';
 
     return {
