@@ -25,6 +25,10 @@ export function extractWorkdayDetails() {
         companyInfo: companyInfo,
         url: window.location.href,
         jobDescription: jobDescription,
-        postingSource: 'Workday'
+        postingSource: 'Workday',
+        location: location,
+        fullTime: fullTime,
+        datePosted: datePosted,
+        requisition: requisition
       };
   }

@@ -20,6 +20,7 @@ export function extractLeverDetails() {
     companyInfo: companyInfo,
     url: window.location.href,
     jobDescription: jobDescription,
-    postingSource: 'Lever'
+    postingSource: 'Lever',
+    location: location
   };
 }

@@ -80,7 +80,16 @@ const extractors = {
             details.jobDescription = document.getElementById('jobDescription').value;
             details.postingSource = document.getElementById('postingSource').value;
 
-            const content = JSON.stringify(details, null, 2);
+            // Separate standard fields and extra fields
+            const standardFields = ['jobTitle', 'companyInfo', 'url', 'jobDescription', 'postingSource', 'timestamp', 'notes', 'stage'];
+            const extraFields = {};
+            for (const key in details) {
+              if (!standardFields.includes(key)) {
+                extraFields[key] = details[key];
+              }
+            }
+
+            const content = JSON.stringify({ ...details, extra: extraFields }, null, 2);
             const blob = new Blob([content], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
