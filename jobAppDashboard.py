@@ -10,7 +10,6 @@ import glob
 from datetime import datetime, timedelta
 import csv
 from time import sleep
-import dash_html_components as html
 
 
 # Initialize the Dash app
