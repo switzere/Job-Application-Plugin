@@ -1,14 +1,19 @@
 {
-    "manifest_version": 3,
-    "name": "Job Application Recorder",
-    "version": "1.0",
-    "description": "Record job application details.",
-    "action": {
-      "default_popup": "popup.html"
-    },
-    "permissions": [
-      "activeTab",
-      "downloads",
-      "scripting"
-    ]
+  "manifest_version": 3,
+  "name": "Job Application Recorder",
+  "version": "3.0",
+  "description": "Record job application details.",
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "permissions": [
+    "activeTab",
+    "downloads",
+    "scripting",
+    "storage",
+    "contextMenus"
+  ],
+  "background": {
+    "service_worker": "background.js"
   }
+}

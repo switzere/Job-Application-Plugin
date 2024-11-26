@@ -96,6 +96,17 @@ const extractors = {
             const filename = `job_app_details_${timestamp}.json`;
   
             downloadFile(url, filename);
+
+              // Store the details in local storage
+            chrome.storage.local.get(['jobDetails'], (result) => {
+              const jobDetails = result.jobDetails || [];
+              jobDetails.push(details);
+              chrome.storage.local.set({ jobDetails: jobDetails }, () => {
+                // Open a new tab with the page.html
+                chrome.tabs.create({ url: chrome.runtime.getURL('page.html') });
+              });
+            });
+
             statusMessage.textContent = 'Details Recorded Successfully!';
             statusMessage.style.display = 'block';
             jobDetailsDiv.style.display = 'none';
