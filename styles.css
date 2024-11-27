@@ -1,0 +1,31 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #00f2f2;
+  }
+  .button-container {
+    margin-bottom: 20px;
+  }
+  .table-container {
+    max-height: 400px;
+    overflow-y: auto;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+  th, td {
+    border: 1px solid #f200f2;
+    padding: 8px;
+    width: 100px;
+    text-align: left;
+    background-color: #f2f200;
+  }
+  .baseCol {
+    width: 10%;
+    height: 1%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: hidden;
+    background-color: #f1f1f1;
+  }

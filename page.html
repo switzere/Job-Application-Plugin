@@ -2,14 +2,7 @@
 <html>
 <head>
   <title>Recorded Job Applications</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-    }
-    .button-container {
-      margin-bottom: 20px;
-    }
-  </style>
+  <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
   <h1>Recorded Job Applications</h1>
@@ -18,9 +11,15 @@
     <button id="uploadButton">Upload from File</button>
     <button id="downloadButton">Download to File</button>
   </div>
-  <div id="job-details">
-    <!-- Job details will be populated here -->
+  <div class="table-container">
+    <table id="job-details">
+      <!-- Job details will be populated here -->
+    </table>
+  </div>
+  <div class="chart-container">
+    <canvas id="jobChart"></canvas>
   </div>
   <script src="page.js"></script>
+  <script type="module" src="node_modules/chart.js/dist/chart.umd.js"></script>
 </body>
 </html>
