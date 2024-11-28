@@ -5,11 +5,14 @@
   <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-  <h1>Recorded Job Applications</h1>
-  <div class="button-container">
-    <input type="file" id="fileInput" />
-    <button id="uploadButton">Upload from File</button>
-    <button id="downloadButton">Download to File</button>
+  <div class="header">
+    <h1>Job Application Dashboard</h1>
+    <div class="button-container">
+      <input type="file" id="fileInput" />
+      <button id="uploadButton">Upload from File</button>
+      <button id="downloadButton">Download to File</button>
+      <button id="refreshButton">Refresh Graphs</button>
+    </div>
   </div>
   <div class="table-container">
     <table id="job-details">
@@ -17,9 +20,20 @@
     </table>
   </div>
   <div class="chart-container">
-    <canvas id="jobChart"></canvas>
+    <div class="chart-item">
+      <p id="totalJobsCount">Total Jobs: 0</p>
+      <canvas id="jobChart"></canvas>
+    </div>
+    <div class="chart-item">
+      <p id="jobsThisWeekCount">This Week: 0</p>
+      <canvas id="dateChart"></canvas>
+    </div>
+    <div class="chart-item">
+      <canvas id="sourceChart"></canvas>
+    </div>
   </div>
   <script src="page.js"></script>
   <script type="module" src="node_modules/chart.js/dist/chart.umd.js"></script>
+  <script type="module" src="node_modules/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
 </body>
 </html>
