@@ -3,7 +3,6 @@
   "name": "Job Application Recorder",
   "version": "3.0",
   "description": "Record and visualize job application details.",
-  "default_locale": "en",
   "action": {
     "default_popup": "popup.html"
   },

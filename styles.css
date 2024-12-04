@@ -1,6 +1,8 @@
 body {
   font-family: Arial, sans-serif;
-  background-color: #ffffff;
+  background-color: #f9f9f9;
+  margin: 0;
+  padding: 0;
 }
 
 .header {
@@ -8,12 +10,14 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 20px;
-  background-color: #f2f2f2;
+  background-color: #4CAF50;
+  color: white;
   border-bottom: 1px solid #ddd;
 }
 
 .header h1 {
   margin: 0;
+  font-size: 1.5em;
 }
 
 .button-container {
@@ -21,9 +25,29 @@ body {
   gap: 10px;
 }
 
+.button-container button,
+.button-container input[type="file"] {
+  padding: 10px 20px;
+  font-size: 1em;
+  color: white;
+  background-color: #4CAF50;
+  border: 2px solid #ddd; /* Add border */
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.button-container button:hover,
+.button-container input[type="file"]:hover {
+  background-color: #45a049;
+}
+
 .table-container {
   max-height: 400px;
   overflow-y: auto;
+  margin: 20px;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 table {
@@ -33,31 +57,37 @@ table {
 }
 
 th, td {
-  border: 1px solid #f200f2;
-  padding: 8px;
-  width: 100px;
+  border: 1px solid #ddd;
+  padding: 12px;
   text-align: left;
-  background-color: #f2f200;
+}
+
+th {
+  background-color: #f2f2f2;
+  font-weight: bold;
 }
 
 .baseCol {
-  width: 10%;
-  height: 1%;
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: hidden;
-  background-color: #f1f1f1;
+  text-overflow: ellipsis;
 }
 
 .chart-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  margin: 20px;
 }
 
 .chart-item {
   flex: 1 1 30%;
   margin: 10px;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  text-align: center;
 }
 
 canvas {
@@ -66,10 +96,9 @@ canvas {
 }
 
 #totalJobsCount, #jobsThisWeekCount {
-  font-size: 2em; /* Increase the font size */
+  font-size: 4em; /* Increase the font size */
   font-weight: bold; /* Make the text bold */
   margin-top: 10px; /* Add some margin for spacing */
-  /* center middle text */
   display: flex;
   justify-content: center;
 }

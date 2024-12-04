@@ -328,7 +328,12 @@ function createDateChart(details) {
       type: 'pie',
       data: chartData,
       options: {
-        responsive: true
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'right' // Position the legend on the right side
+          }
+        }
       }
     });
   }

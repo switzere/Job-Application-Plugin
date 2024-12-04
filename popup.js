@@ -89,22 +89,19 @@ const extractors = {
               }
             }
 
-            const content = JSON.stringify({ ...details, extra: extraFields }, null, 2);
-            const blob = new Blob([content], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-            const filename = `job_app_details_${timestamp}.json`;
+            //const content = JSON.stringify({ ...details, extra: extraFields }, null, 2);
+            //const blob = new Blob([content], { type: 'application/json' });
+            //const url = URL.createObjectURL(blob);
+            //const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+            //const filename = `job_app_details_${timestamp}.json`;
   
-            downloadFile(url, filename);
+            //downloadFile(url, filename);
 
               // Store the details in local storage
             chrome.storage.local.get(['jobDetails'], (result) => {
               const jobDetails = result.jobDetails || [];
               jobDetails.push(details);
-              chrome.storage.local.set({ jobDetails: jobDetails }, () => {
-                // Open a new tab with the page.html
-                chrome.tabs.create({ url: chrome.runtime.getURL('page.html') });
-              });
+              chrome.storage.local.set({ jobDetails: jobDetails });
             });
 
             statusMessage.textContent = 'Details Recorded Successfully!';
@@ -116,20 +113,6 @@ const extractors = {
         }
       });
     }
-  
-    function downloadFile(url, filename) {
-      console.log("downloadFile");
-      chrome.downloads.download({
-        url: url,
-        filename: filename,
-        saveAs: false
-      }, (downloadId) => {
-        if (chrome.runtime.lastError) {
-          console.error(chrome.runtime.lastError.message);
-        } else {
-          console.log('Download started with ID:', downloadId);
-        }
-      });
-    }
+
   });
   
