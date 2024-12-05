@@ -10,14 +10,14 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 20px;
-  background-color: #4CAF50;
-  color: white;
+  background-color: #b6baec;
+  color: black;
   border-bottom: 1px solid #ddd;
 }
 
 .header h1 {
   margin: 0;
-  font-size: 1.5em;
+  font-size: 4em;
 }
 
 .button-container {
@@ -29,16 +29,16 @@ body {
 .button-container input[type="file"] {
   padding: 10px 20px;
   font-size: 1em;
-  color: white;
-  background-color: #4CAF50;
-  border: 2px solid #ddd; /* Add border */
+  color: black;
+  background-color: #b6baec;
+  border: 2px solid rgba(0, 0, 0, 0.5); /* Add border */
   border-radius: 5px;
   cursor: pointer;
 }
 
 .button-container button:hover,
 .button-container input[type="file"]:hover {
-  background-color: #45a049;
+  background-color: #aeb2ec;
 }
 
 .table-container {
