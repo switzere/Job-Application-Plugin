@@ -11,7 +11,7 @@
       justify-content: center;
       height: 100vh;
     }
-    .container input[type="file"] {
+    .container input[type="file"], .container input[type="text"] {
       margin: 20px;
     }
   </style>
@@ -19,6 +19,7 @@
 <body>
   <div class="container">
     <h1>Upload Extractor</h1>
+    <input type="text" id="hostname" placeholder="Enter hostname (e.g., linkedin.com)" />
     <input type="file" id="uploadExtractor" accept=".js" />
     <p id="statusMessage"></p>
   </div>
