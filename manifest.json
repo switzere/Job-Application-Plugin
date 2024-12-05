@@ -1,5 +1,5 @@
 {
-  "manifest_version": 3,
+  "manifest_version": 3.1,
   "name": "Job Application Recorder",
   "version": "3.0",
   "description": "Record and visualize job application details.",
