@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Upload Extractor</title>
+  <style>
+    body { font-family: Arial, sans-serif; }
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    .container input[type="file"] {
+      margin: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Upload Extractor</h1>
+    <input type="file" id="uploadExtractor" accept=".js" />
+    <p id="statusMessage"></p>
+  </div>
+  <script src="upload.js"></script>
+</body>
+</html>

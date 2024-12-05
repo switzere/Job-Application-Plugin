@@ -27,7 +27,7 @@ const extractors = {
       const tab = tabs[0];
       const url = new URL(tab.url);
       const hostname = url.hostname;
-  
+    
       // Determine the script path based on the hostname
       let scriptPath = extractors['default'];
       for (const key in extractors) {
@@ -36,18 +36,23 @@ const extractors = {
           break;
         }
       }
-  
+    
       console.log(`Loading script: ${scriptPath}`);
-  
-      // Dynamically import the script and execute the extraction function
-      import(chrome.runtime.getURL(scriptPath)).then((module) => {
-        const extractionFunction = module[Object.keys(module)[0]];
-        console.log(`Executing extraction function from: ${scriptPath}`);
-        executeScriptAndHandleResults(tab.id, extractionFunction);
-      }).catch((error) => {
-        console.error('Failed to load script:', error);
-        statusMessage.textContent = 'Failed to Record Details.';
-      });
+    
+      // Use the custom extractor if available
+      if (window.customExtractor) {
+        executeScriptAndHandleResults(tab.id, window.customExtractor);
+      } else {
+        // Dynamically import the script and execute the extraction function
+        import(chrome.runtime.getURL(scriptPath)).then((module) => {
+          const extractionFunction = module[Object.keys(module)[0]];
+          console.log(`Executing extraction function from: ${scriptPath}`);
+          executeScriptAndHandleResults(tab.id, extractionFunction);
+        }).catch((error) => {
+          console.error('Failed to load script:', error);
+          statusMessage.textContent = 'Failed to Record Details.';
+        });
+      }
     });
   
     function executeScriptAndHandleResults(tabId, extractionFunction) {
