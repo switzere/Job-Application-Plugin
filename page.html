@@ -12,11 +12,18 @@
       <button id="uploadButton">Upload from File</button>
       <button id="downloadButton">Download to File</button>
       <button id="refreshButton">Refresh Graphs</button>
+      <button id="toggleDeletedJobsButton">Show Deleted Jobs</button>
     </div>
   </div>
   <div class="table-container">
     <table id="job-details">
       <!-- Job details will be populated here -->
+    </table>
+  </div>
+  <div class="table-container" id="deletedJobsContainer" style="display: none;">
+    <h2>Deleted Job Applications</h2>
+    <table id="deleted-job-details">
+      <!-- Deleted job details will be populated here -->
     </table>
   </div>
   <div class="chart-container">

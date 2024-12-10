@@ -1,29 +1,44 @@
 document.addEventListener('DOMContentLoaded', () => {
   const jobDetailsTable = document.getElementById('job-details');
+  const deletedJobDetailsTable = document.getElementById('deleted-job-details');
   const fileInput = document.getElementById('fileInput');
   const uploadButton = document.getElementById('uploadButton');
   const downloadButton = document.getElementById('downloadButton');
   const refreshButton = document.getElementById('refreshButton');
+  const toggleDeletedJobsButton = document.getElementById('toggleDeletedJobsButton');
+  const deletedJobsContainer = document.getElementById('deletedJobsContainer');
   const jobChartCanvas = document.getElementById('jobChart').getContext('2d');
   const dateChartCanvas = document.getElementById('dateChart').getContext('2d');
   const sourceChartCanvas = document.getElementById('sourceChart').getContext('2d');
   const totalJobsCount = document.getElementById('totalJobsCount');
   const jobsThisWeekCount = document.getElementById('jobsThisWeekCount');
 
-
   let jobChartInstance;
   let dateChartInstance;
   let sourceChartInstance;
 
   // Load job details from local storage and display them
-  chrome.storage.local.get(['jobDetails'], (result) => {
+  chrome.storage.local.get(['jobDetails', 'deletedJobDetails'], (result) => {
     const details = result.jobDetails || [];
+    const deletedDetails = result.deletedJobDetails || [];
     displayJobDetails(details);
+    displayDeletedJobDetails(deletedDetails);
     createJobChart(details);
     createDateChart(details);
     createSourceChart(details);
     updateCounts(details);
   });
+
+    // Toggle the visibility of the deleted jobs section
+    toggleDeletedJobsButton.addEventListener('click', () => {
+      if (deletedJobsContainer.style.display === 'none') {
+        deletedJobsContainer.style.display = 'block';
+        toggleDeletedJobsButton.textContent = 'Hide Deleted Jobs';
+      } else {
+        deletedJobsContainer.style.display = 'none';
+        toggleDeletedJobsButton.textContent = 'Show Deleted Jobs';
+      }
+    });
 
   // Display job details in a table
   function displayJobDetails(details) {
@@ -114,9 +129,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     chrome.storage.local.get(['jobDetails'], (result) => {
       const details = result.jobDetails || [];
+      const deletedDetails = result.deletedJobDetails || [];
       details[rowIndex].stage = select.value;
       chrome.storage.local.set({ jobDetails: details }, () => {
         displayJobDetails(details); // Refresh the table
+        displayDeletedJobDetails(deletedDetails); // Refresh the deleted job details table
         // createJobChart(details); // Refresh the chart
         // createDateChart(details); // Refresh the date chart
         // createSourceChart(details); // Refresh the source chart
@@ -129,18 +146,118 @@ document.addEventListener('DOMContentLoaded', () => {
     const button = event.target;
     const rowIndex = button.getAttribute('data-index');
 
-    chrome.storage.local.get(['jobDetails'], (result) => {
+    chrome.storage.local.get(['jobDetails', 'deletedJobDetails'], (result) => {
       let details = result.jobDetails || [];
-      details.splice(rowIndex, 1); // Remove the row from the array
-      chrome.storage.local.set({ jobDetails: details }, () => {
+      let deletedDetails = result.deletedJobDetails || [];
+      const deletedJob = details.splice(rowIndex, 1)[0]; // Remove the row from the array and get the deleted job
+      deletedDetails.push(deletedJob); // Add the deleted job to the deleted details array
+
+      chrome.storage.local.set({ jobDetails: details, deletedJobDetails: deletedDetails }, () => {
         displayJobDetails(details); // Refresh the table
-        // createJobChart(details); // Refresh the chart
-        // createDateChart(details); // Refresh the date chart
-        // createSourceChart(details); // Refresh the source chart
+        displayDeletedJobDetails(deletedDetails); // Refresh the deleted job details table
+        createJobChart(details); // Refresh the chart
+        createDateChart(details); // Refresh the date chart
+        createSourceChart(details); // Refresh the source chart
         updateCounts(details); // Update counts
       });
     });
   }
+
+    // Restore deleted job
+  function restoreDeletedJob(index) {
+    chrome.storage.local.get(['jobDetails', 'deletedJobDetails'], (result) => {
+      let details = result.jobDetails || [];
+      let deletedDetails = result.deletedJobDetails || [];
+      const restoredJob = deletedDetails.splice(index, 1)[0]; // Remove the job from the deleted details array and get the restored job
+      details.push(restoredJob); // Add the restored job to the job details array
+
+      chrome.storage.local.set({ jobDetails: details, deletedJobDetails: deletedDetails }, () => {
+        displayJobDetails(details); // Refresh the table
+        displayDeletedJobDetails(deletedDetails); // Refresh the deleted job details table
+        createJobChart(details); // Refresh the chart
+        createDateChart(details); // Refresh the date chart
+        createSourceChart(details); // Refresh the source chart
+        updateCounts(details); // Update counts
+      });
+    });
+  }
+
+ // Display deleted job details in a table
+function displayDeletedJobDetails(deletedDetails) {
+  deletedJobDetailsTable.innerHTML = '';
+  if (deletedDetails.length === 0) {
+    deletedJobDetailsTable.innerHTML = '<p>No deleted job applications.</p>';
+  } else {
+    const thead = document.createElement('thead');
+    const tbody = document.createElement('tbody');
+
+    // Create table headers
+    thead.innerHTML = `
+      <tr>
+        <th style="width: 15%;">Job Title</th>
+        <th style="width: 15%;">Company Info</th>
+        <th style="width: 10%;">URL</th>
+        <th style="width: 20%;">Job Description</th>
+        <th style="width: 10%;">Posting Source</th>
+        <th style="width: 10%;">Timestamp</th>
+        <th style="width: 10%;">Notes</th>
+        <th style="width: 10%;">Stage</th>
+        <th style="width: 10%;">Actions</th>
+      </tr>
+    `;
+
+    // Create table rows
+    deletedDetails.forEach((detail, index) => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${detail.jobTitle || 'N/A'}</td>
+        <td>${detail.companyInfo || 'N/A'}</td>
+        <td><a href="${detail.url}" target="_blank">${truncateText(detail.url, 30) || 'N/A'}</td>
+        <td>${truncateText(detail.jobDescription, 50) || 'N/A'}</td>
+        <td>${detail.postingSource || 'N/A'}</td>
+        <td>${detail.timestamp || 'N/A'}</td>
+        <td>${detail.notes || 'N/A'}</td>
+        <td>${detail.stage || 'N/A'}</td>
+        <td>
+          <button class="restore-button" data-index="${index}">Restore</button>
+          <button class="permanent-delete-button" data-index="${index}">Permanent Delete</button>
+        </td>
+      `;
+      tbody.appendChild(row);
+    });
+
+    deletedJobDetailsTable.appendChild(thead);
+    deletedJobDetailsTable.appendChild(tbody);
+
+    // Add event listeners to restore buttons
+    document.querySelectorAll('.restore-button').forEach(button => {
+      button.addEventListener('click', (event) => {
+        const index = event.target.getAttribute('data-index');
+        restoreDeletedJob(index);
+      });
+    });
+
+    // Add event listeners to permanent delete buttons
+    document.querySelectorAll('.permanent-delete-button').forEach(button => {
+      button.addEventListener('click', (event) => {
+        const index = event.target.getAttribute('data-index');
+        permanentlyDeleteJob(index);
+      });
+    });
+  }
+}
+
+// Permanently delete job
+function permanentlyDeleteJob(index) {
+  chrome.storage.local.get(['deletedJobDetails'], (result) => {
+    let deletedDetails = result.deletedJobDetails || [];
+    deletedDetails.splice(index, 1); // Remove the job from the deleted details array
+
+    chrome.storage.local.set({ deletedJobDetails: deletedDetails }, () => {
+      displayDeletedJobDetails(deletedDetails); // Refresh the deleted job details table
+    });
+  });
+}
 
   // Handle file upload
   uploadButton.addEventListener('click', () => {
@@ -181,6 +298,9 @@ document.addEventListener('DOMContentLoaded', () => {
   refreshButton.addEventListener('click', () => {
     chrome.storage.local.get(['jobDetails'], (result) => {
       const details = result.jobDetails || [];
+      const deletedDetails = result.deletedJobDetails || [];
+      displayJobDetails(details); // Refresh the table
+      displayDeletedJobDetails(deletedDetails); // Refresh the deleted job details table
       createJobChart(details); // Refresh the chart
       createDateChart(details); // Refresh the date chart
       createSourceChart(details); // Refresh the source chart
