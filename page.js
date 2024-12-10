@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const jobDetailsTable = document.getElementById('job-details');
   const fileInput = document.getElementById('fileInput');
   const uploadButton = document.getElementById('uploadButton');
-  const downloadButton = document.getElementById('downloadButton');
   const refreshButton = document.getElementById('refreshButton');
   const jobChartCanvas = document.getElementById('jobChart').getContext('2d');
   const dateChartCanvas = document.getElementById('dateChart').getContext('2d');
@@ -160,21 +159,6 @@ document.addEventListener('DOMContentLoaded', () => {
       };
       reader.readAsText(file);
     }
-  });
-
-  // Handle file download
-  downloadButton.addEventListener('click', () => {
-    chrome.storage.local.get(['jobDetails'], (result) => {
-      const details = result.jobDetails || [];
-      const content = JSON.stringify(details, null, 2);
-      const blob = new Blob([content], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'job_applications.json';
-      a.click();
-      URL.revokeObjectURL(url);
-    });
   });
 
   // Handle refresh button
