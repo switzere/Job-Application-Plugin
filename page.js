@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const jobDetailsTable = document.getElementById('job-details');
   const deletedJobDetailsTable = document.getElementById('deleted-job-details');
   const fileInput = document.getElementById('fileInput');
-  const uploadButton = document.getElementById('uploadButton');
   const downloadButton = document.getElementById('downloadButton');
   const refreshButton = document.getElementById('refreshButton');
   const toggleDeletedJobsButton = document.getElementById('toggleDeletedJobsButton');
@@ -33,10 +32,10 @@ document.addEventListener('DOMContentLoaded', () => {
     toggleDeletedJobsButton.addEventListener('click', () => {
       if (deletedJobsContainer.style.display === 'none') {
         deletedJobsContainer.style.display = 'block';
-        toggleDeletedJobsButton.textContent = 'Hide Deleted Jobs';
+        toggleDeletedJobsButton.title = 'Hide Deleted Jobs';
       } else {
         deletedJobsContainer.style.display = 'none';
-        toggleDeletedJobsButton.textContent = 'Show Deleted Jobs';
+        toggleDeletedJobsButton.title = 'Show Deleted Jobs';
       }
     });
 
@@ -259,25 +258,30 @@ function permanentlyDeleteJob(index) {
   });
 }
 
-  // Handle file upload
-  uploadButton.addEventListener('click', () => {
-    const file = fileInput.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const content = e.target.result;
-        const details = JSON.parse(content);
-        chrome.storage.local.set({ jobDetails: details }, () => {
-          displayJobDetails(details); // Refresh the table
-          createJobChart(details); // Refresh the chart
-          createDateChart(details); // Refresh the date chart
-          createSourceChart(details); // Refresh the source chart
-          updateCounts(details); // Update counts
-        });
-      };
-      reader.readAsText(file);
-    }
-  });
+// Handle file selection and upload
+uploadButton.addEventListener('click', () => {
+  fileInput.click();
+});
+
+fileInput.addEventListener('change', () => {
+  const file = fileInput.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const content = e.target.result;
+      const details = JSON.parse(content);
+      chrome.storage.local.set({ jobDetails: details }, () => {
+        displayJobDetails(details); // Refresh the table
+        createJobChart(details); // Refresh the chart
+        createDateChart(details); // Refresh the date chart
+        createSourceChart(details); // Refresh the source chart
+        updateCounts(details); // Update counts
+      });
+    };
+    reader.readAsText(file);
+  }
+});
+
 
   // Handle file download
   downloadButton.addEventListener('click', () => {
