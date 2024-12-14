@@ -13,10 +13,21 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 });
 
 chrome.action.onClicked.addListener((tab) => {
-  chrome.scripting.executeScript({
-    target: { tabId: tab.id },
-    function: () => {
-      chrome.runtime.sendMessage({ action: 'togglePopup' });
-    }
+  chrome.windows.create({
+    url: chrome.runtime.getURL('popup.html'),
+    type: 'popup',
+    width: 400,
+    height: 600
+  }, (newWindow) => {
+    chrome.runtime.onMessage.addListener(function listener(message, sender, sendResponse) {
+      if (message.action === 'popupReady') {
+        chrome.runtime.onMessage.removeListener(listener);
+        chrome.runtime.sendMessage({
+          action: 'openPopup',
+          tabId: tab.id,
+          tabUrl: tab.url
+        });
+      }
+    });
   });
 });

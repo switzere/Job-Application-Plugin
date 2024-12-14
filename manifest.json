@@ -14,7 +14,8 @@
     "downloads",
     "scripting",
     "storage",
-    "contextMenus"
+    "contextMenus",
+    "windows"
   ],
   "background": {
     "service_worker": "background.js"
@@ -22,7 +23,8 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content.js"]
+      "js": ["content.js"],
+      "resources": ["popup.html"]
     }
   ]
 }
