@@ -1,11 +1,9 @@
 {
   "manifest_version": 3,
   "name": "Job Application Recorder",
-  "version": "3.1",
+  "version": "3.2",
   "description": "Record and visualize job application details.",
-  "action": {
-    "default_popup": "popup.html"
-  },
+  "action": {},
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
@@ -20,5 +18,11 @@
   ],
   "background": {
     "service_worker": "background.js"
-  }
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ]
 }

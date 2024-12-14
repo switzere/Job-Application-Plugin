@@ -2,17 +2,13 @@
 <html>
 <head>
   <title>Job Application Recorder</title>
-  <style>
-    body { font-family: Arial, sans-serif; }
-    .header-container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-  </style>
+  <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-  <h1 id="statusMessage">Recording Job Application...</h1>
+  <div class="header-container">
+    <button id="homeButton" class="home-button">Home</button>
+    <h1 id="statusMessage">Recording Job Application...</h1>
+  </div>
   <div id="jobDetails" style="display: none;">
     <div class="header-container">
       <h2>Job Details</h2>

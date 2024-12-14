@@ -11,3 +11,12 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     chrome.tabs.create({ url: chrome.runtime.getURL('page.html') });
   }
 });
+
+chrome.action.onClicked.addListener((tab) => {
+  chrome.scripting.executeScript({
+    target: { tabId: tab.id },
+    function: () => {
+      chrome.runtime.sendMessage({ action: 'togglePopup' });
+    }
+  });
+});

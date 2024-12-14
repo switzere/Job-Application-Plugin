@@ -22,6 +22,12 @@ const extractors = {
     const jobDescriptionSpan = document.getElementById('jobDescription');
     const postingSourceSpan = document.getElementById('postingSource');
     const confirmButton = document.getElementById('confirmButton');
+    const homeButton = document.getElementById('homeButton');
+
+    homeButton.addEventListener('click', () => {
+      window.open('page.html', '_blank');
+    });
+
   
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       const tab = tabs[0];
@@ -113,6 +119,11 @@ const extractors = {
         }
       });
     }
+
+      // Prevent popup from closing when clicking outside
+      document.addEventListener('click', (event) => {
+        event.stopPropagation();
+      });
 
   });
   
