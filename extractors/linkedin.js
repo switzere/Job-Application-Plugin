@@ -9,7 +9,7 @@ export function extractLinkedInDetails() {
 
     // Job Posting info ia-JobDescription
     const jobDescriptionElement = document.querySelector('#job-details');
-    const jobDescription = jobDescriptionElement ? jobDescriptionElement.innerText : 'Job Description Not Found';
+    const jobDescription = jobDescriptionElement ? jobDescriptionElement.innerHTML : 'Job Description Not Found';
 
     return {
         jobTitle: jobTitle,

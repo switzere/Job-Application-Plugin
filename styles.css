@@ -5,14 +5,19 @@ body {
   padding: 0;
 }
 
-.header {
+.header-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
+  padding: 10px;
   background-color: #b6baec;
   color: black;
   border-bottom: 1px solid #ddd;
+}
+
+
+.header-container h2 {
+  margin: 0;
 }
 
 .header h1 {
@@ -145,3 +150,76 @@ canvas {
   margin: 4px 2px;
   cursor: pointer;
 }
+
+/* Add styles for the confirm button */
+.confirmButton {
+  background-color: #232a83;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+
+/* Add styles for the job details section */
+#jobDetails {
+  padding: 20px;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin: 20px;
+}
+
+#jobDetails h2 {
+  margin-top: 0;
+}
+
+#jobDetails p {
+  margin: 10px 0;
+}
+
+#jobDetails textarea {
+  width: 100%;
+  padding: 10px -10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+#jobTitle, #companyInfo, #websiteURL, #postingSource {
+  height: 15px; /* Make these text areas thinner */
+}
+
+#jobDescription {
+  height: 100px; /* Make the job description text area larger */
+  overflow-y: auto; /* Make the div scrollable */
+  border: 1px solid #ddd; /* Add border to match other text areas */
+  padding: 10px; /* Add padding for better readability */
+  border-radius: 5px; /* Add border radius to match other text areas */
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1); /* Add inner shadow for consistency */
+}
+
+#jobDetails button {
+  background-color: #232a83;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin-top: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+#jobDetails button:hover {
+  background-color: #211c68;
+}
+

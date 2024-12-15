@@ -6,20 +6,19 @@
 </head>
 <body>
   <div class="header-container">
-    <button id="homeButton" class="home-button">Home</button>
-    <h1 id="statusMessage">Recording Job Application...</h1>
+    <h2>Job Details</h2>
+    <div class="button-container">
+      <button id="confirmButton" class="confirmButton">Confirm</button>
+      <button id="homeButton" class="home-button">Home</button>
+    </div>    <!--<h1 id="statusMessage">Recording Job Application...</h1>-->
   </div>
-  <div id="jobDetails" style="display: none;">
-    <div class="header-container">
-      <h2>Job Details</h2>
-      <button id="confirmButton">Confirm</button>
+  <div id="jobDetails"><!-- style="display: none;">-->
+      <p><strong>Job Title:</strong> <textarea id="jobTitle" type="text"></textarea></p>
+      <p><strong>Company:</strong> <textarea id="companyInfo" type="text"></textarea></p>
+      <p><strong>Website URL:</strong> <textarea id="websiteURL" type="text"></textarea></p>
+      <p><strong>Posting Source:</strong> <textarea id="postingSource" type="text"></textarea></p>
+      <p><strong>Job Description:</strong> <div id="jobDescription" contenteditable="true"></div></p> <!-- Make div editable -->
     </div>
-    <p><strong>Job Title:</strong> <textarea id="jobTitle" type="text"></textarea></p>
-    <p><strong>Company Info:</strong> <textarea id="companyInfo" type="text"></textarea></p>
-    <p><strong>Website URL:</strong> <textarea id="websiteURL" type="text"></textarea></p>
-    <p><strong>Job Description:</strong> <textarea id="jobDescription"></textarea></p>
-    <p><strong>Posting Source:</strong> <textarea id="postingSource" type="text"></textarea></p>
-  </div>
   <pre id="fileContent"></pre>
   <script src="popup.js"></script>
 </body>

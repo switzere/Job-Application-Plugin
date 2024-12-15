@@ -68,11 +68,12 @@ document.addEventListener('DOMContentLoaded', () => {
       if (results && results[0] && results[0].result) {
         const details = results[0].result;
         console.log('Extraction results:', details);
+        console.log(details.jobDescription);
 
         jobTitleSpan.value = details.jobTitle || 'Job Title Not Found';
         companyInfoSpan.value = details.companyInfo || 'Company Info Not Found';
         websiteURLSpan.value = details.url || 'URL Not Found';
-        jobDescriptionSpan.value = details.jobDescription || 'Job Description Not Found';
+        jobDescriptionSpan.innerHTML = details.jobDescription || 'Job Description Not Found';
         postingSourceSpan.value = details.postingSource || 'Posting Source Not Found';
 
         details.timestamp = new Date().toISOString();
@@ -80,15 +81,17 @@ document.addEventListener('DOMContentLoaded', () => {
         details.stage = 'Applied';  // Add a stage field with default value "Applied"
 
         console.log('Hiding status message and showing job details');
-        statusMessage.style.display = 'none';
-        jobDetailsDiv.style.display = 'block';
+        //statusMessage.style.display = 'none';
+        //jobDetailsDiv.style.display = 'block';
+
+        console.log(document.getElementById('jobDescription'));
 
         confirmButton.addEventListener('click', () => {
           // get info from the popup
           details.jobTitle = document.getElementById('jobTitle').value;
           details.companyInfo = document.getElementById('companyInfo').value;
           details.url = document.getElementById('websiteURL').value;
-          details.jobDescription = document.getElementById('jobDescription').value;
+          details.jobDescription = document.getElementById('jobDescription').innerHTML;
           details.postingSource = document.getElementById('postingSource').value;
 
           // Separate standard fields and extra fields
@@ -107,9 +110,9 @@ document.addEventListener('DOMContentLoaded', () => {
             chrome.storage.local.set({ jobDetails: jobDetails });
           });
 
-          statusMessage.textContent = 'Details Recorded Successfully!';
-          statusMessage.style.display = 'block';
-          jobDetailsDiv.style.display = 'none';
+          //statusMessage.textContent = 'Details Recorded Successfully!';
+          //statusMessage.style.display = 'block';
+          //jobDetailsDiv.style.display = 'none';
         }, { once: true }); // Ensure the event listener is added only once
       } else {
         statusMessage.textContent = 'Failed to Record Details.';
