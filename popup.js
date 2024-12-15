@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const companyInfoSpan = document.getElementById('companyInfo');
   const websiteURLSpan = document.getElementById('websiteURL');
   const jobDescriptionSpan = document.getElementById('jobDescription');
+  const locationInfoSpan = document.getElementById('locationInfo');
   const postingSourceSpan = document.getElementById('postingSource');
   const confirmButton = document.getElementById('confirmButton');
   const homeButton = document.getElementById('homeButton');
@@ -67,6 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, (results) => {
       if (results && results[0] && results[0].result) {
         const details = results[0].result;
+        console.log(results);
         console.log('Extraction results:', details);
         console.log(details.jobDescription);
 
@@ -75,6 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
         websiteURLSpan.value = details.url || 'URL Not Found';
         jobDescriptionSpan.innerHTML = details.jobDescription || 'Job Description Not Found';
         postingSourceSpan.value = details.postingSource || 'Posting Source Not Found';
+        locationInfoSpan.value = details.locationInfo || 'Location Info Not Found';
 
         details.timestamp = new Date().toISOString();
         details.notes = '';  // Add a blank notes field
@@ -93,9 +96,10 @@ document.addEventListener('DOMContentLoaded', () => {
           details.url = document.getElementById('websiteURL').value;
           details.jobDescription = document.getElementById('jobDescription').innerHTML;
           details.postingSource = document.getElementById('postingSource').value;
+          details.locationInfo = document.getElementById('locationInfo').value;
 
           // Separate standard fields and extra fields
-          const standardFields = ['jobTitle', 'companyInfo', 'url', 'jobDescription', 'postingSource', 'timestamp', 'notes', 'stage'];
+          const standardFields = ['jobTitle', 'companyInfo', 'url', 'jobDescription', 'postingSource', 'locationInfo', 'postDate', 'timestamp', 'notes', 'stage'];
           const extraFields = {};
           for (const key in details) {
             if (!standardFields.includes(key)) {

@@ -192,7 +192,7 @@ canvas {
   box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
-#jobTitle, #companyInfo, #websiteURL, #postingSource {
+#jobTitle, #companyInfo, #websiteURL, #postingSource, #locationInfo {
   height: 15px; /* Make these text areas thinner */
 }
 
