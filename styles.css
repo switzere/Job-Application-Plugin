@@ -15,9 +15,18 @@ body {
   border-bottom: 1px solid #ddd;
 }
 
-
 .header-container h2 {
   margin: 0;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: #b6baec;
+  color: black;
+  border-bottom: 1px solid #ddd;
 }
 
 .header h1 {

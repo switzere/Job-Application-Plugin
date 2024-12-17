@@ -57,9 +57,8 @@ document.addEventListener('DOMContentLoaded', () => {
           <th style="width: 20%;">Job Description</th>
           <th style="width: 10%;">Posting Source</th>
           <th style="width: 10%;">Timestamp</th>
-          <th style="width: 10%;">Notes</th>
           <th style="width: 10%;">Stage</th>
-          <th style="width: 10%;">Actions</th>
+          <th style="width: 20%;">Actions</th>
         </tr>
       `;
 
@@ -67,13 +66,12 @@ document.addEventListener('DOMContentLoaded', () => {
       details.forEach((detail, index) => {
         const row = document.createElement('tr');
         row.innerHTML = `
-          <td contenteditable="true" class="editable baseCol" data-field="jobTitle">${detail.jobTitle || 'N/A'}</td>
-          <td contenteditable="true" class="editable baseCol" data-field="companyInfo">${detail.companyInfo || 'N/A'}</td>
+          <td class="baseCol" data-field="jobTitle">${detail.jobTitle || 'N/A'}</td>
+          <td class="baseCol" data-field="companyInfo">${detail.companyInfo || 'N/A'}</td>
           <td class="baseCol short-url"><a href="${detail.url}" target="_blank" title="${detail.url}">${truncateText(detail.url, 30) || 'N/A'}</a></td>
-          <td contenteditable="true" class="editable baseCol desc" data-field="jobDescription" title="${detail.jobDescription || 'N/A'}">${detail.jobDescription || 'N/A'}</td>
-          <td contenteditable="true" class="editable baseCol" data-field="postingSource">${detail.postingSource || 'N/A'}</td>
+          <td class="baseCol desc" data-field="jobDescription" title="${detail.jobDescription || 'N/A'}">${detail.jobDescription || 'N/A'}</td>
+          <td class="baseCol" data-field="postingSource">${detail.postingSource || 'N/A'}</td>
           <td class="baseCol">${detail.timestamp || 'N/A'}</td>
-          <td contenteditable="true" class="editable baseCol" data-field="notes">${detail.notes || 'N/A'}</td>
           <td>
             <select class="stage-select" data-index="${index}">
               <option value="Applied" ${detail.stage === 'Applied' ? 'selected' : ''}>Applied</option>
@@ -83,18 +81,16 @@ document.addEventListener('DOMContentLoaded', () => {
               <option value="Ghosted" ${detail.stage === 'Ghosted' ? 'selected' : ''}>Ghosted</option>
             </select>
           </td>
-          <td><button class="delete-button" data-index="${index}">Delete</button></td>
+          <td>
+            <button class="details-button" data-index="${index}">Details</button>
+            <button class="delete-button" data-index="${index}">Delete</button>
+          </td>
         `;
         tbody.appendChild(row);
       });
 
       jobDetailsTable.appendChild(thead);
       jobDetailsTable.appendChild(tbody);
-
-      // Add event listeners to editable fields
-      document.querySelectorAll('.editable').forEach(cell => {
-        cell.addEventListener('input', handleCellEdit);
-      });
 
       // Add event listeners to stage dropdowns
       document.querySelectorAll('.stage-select').forEach(select => {
@@ -104,21 +100,13 @@ document.addEventListener('DOMContentLoaded', () => {
       // Add event listeners to delete buttons
       document.querySelectorAll('.delete-button').forEach(button => {
         button.addEventListener('click', handleDeleteRow);
+
+              // Add event listeners to details buttons
+      document.querySelectorAll('.details-button').forEach(button => {
+        button.addEventListener('click', handleDetailsButton);
+      });
       });
     }
-  }
-
-  // Handle cell edit
-  function handleCellEdit(event) {
-    const cell = event.target;
-    const field = cell.getAttribute('data-field');
-    const rowIndex = cell.parentElement.rowIndex - 1; // Adjust for header row
-
-    chrome.storage.local.get(['jobDetails'], (result) => {
-      const details = result.jobDetails || [];
-      details[rowIndex][field] = cell.textContent;
-      chrome.storage.local.set({ jobDetails: details });
-    });
   }
 
   // Handle stage change
@@ -161,6 +149,46 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
+
+  // Handle details button
+  function handleDetailsButton(event) {
+    const button = event.target;
+    const rowIndex = button.getAttribute('data-index');
+
+    chrome.storage.local.get(['jobDetails'], (result) => {
+      const details = result.jobDetails || [];
+      const jobDetail = details[rowIndex];
+      openDetailsPopup(jobDetail);
+    });
+  }
+
+    // Open details popup
+    function openDetailsPopup(detail) {
+      const popup = window.open('', 'Job Details', 'width=600,height=400');
+      popup.document.write(`
+        <html>
+        <head>
+          <title>Job Details</title>
+          <style>
+            body { font-family: Arial, sans-serif; padding: 20px; }
+            h2 { margin-top: 0; }
+            p { margin: 5px 0; }
+          </style>
+        </head>
+        <body>
+          <h2>Job Details</h2>
+          <p><strong>Job Title:</strong> ${detail.jobTitle}</p>
+          <p><strong>Company:</strong> ${detail.companyInfo}</p>
+          <p><strong>URL:</strong> <a href="${detail.url}" target="_blank">${detail.url}</a></p>
+          <p><strong>Location:</strong> ${detail.locationInfo}</p>
+          <p><strong>Posting Source:</strong> ${detail.postingSource}</p>
+          <p><strong>Job Description:</strong> ${detail.jobDescription}</p>
+          <p><strong>Stage:</strong> ${detail.stage}</p>
+          <p><strong>Timestamp:</strong> ${detail.timestamp}</p>
+        </body>
+        </html>
+      `);
+    }
 
     // Restore deleted job
   function restoreDeletedJob(index) {

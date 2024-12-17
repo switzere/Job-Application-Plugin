@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   homeButton.addEventListener('click', () => {
     window.open('page.html', '_blank');
+    window.close();
   });
 
   // Notify the background script that the popup is ready
@@ -111,7 +112,10 @@ document.addEventListener('DOMContentLoaded', () => {
           chrome.storage.local.get(['jobDetails'], (result) => {
             const jobDetails = result.jobDetails || [];
             jobDetails.push(details);
-            chrome.storage.local.set({ jobDetails: jobDetails });
+            chrome.storage.local.set({ jobDetails: jobDetails }, () => {
+              // Close the window after the data is stored
+              window.close();
+            });            
           });
 
           //statusMessage.textContent = 'Details Recorded Successfully!';

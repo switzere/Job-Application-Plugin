@@ -10,6 +10,7 @@ export function extractLinkedInDetails() {
     // Job Posting info ia-JobDescription
     const jobDescriptionElement = document.querySelector('#job-details');
     const jobDescription = jobDescriptionElement ? jobDescriptionElement.innerHTML : 'Job Description Not Found';
+    const jobDescRaw = jobDescriptionElement ? jobDescriptionElement.innerText : 'Job Description Not Found';
 
     // Location info
     const extraDescriptionElement = document.querySelector('.job-details-jobs-unified-top-card__primary-description-container');
@@ -24,6 +25,7 @@ export function extractLinkedInDetails() {
         companyInfo: companyInfo,
         url: window.location.href,
         jobDescription: jobDescription,
+        jobDescRaw: jobDescRaw,
         postingSource: 'LinkedIn',
         locationInfo: locationInfo,
         postDate: postDate

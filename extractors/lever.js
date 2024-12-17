@@ -10,7 +10,8 @@ export function extractLeverDetails() {
   const companyInfo = companyInfoElement ? companyInfoElement : 'Company Info Not Found';
 
   const jobDescriptionElement = document.querySelector('[data-qa="job-description"]');
-  const jobDescription = jobDescriptionElement ? jobDescriptionElement.innerText : 'Job Description Not Found';
+  const jobDescription = jobDescriptionElement ? jobDescriptionElement.innerHTML : 'Job Description Not Found';
+  const jobDescRaw = jobDescriptionElement ? jobDescriptionElement.innerText : 'Job Description Not Found';
 
   const locationElement = document.querySelector('.location');
   const location = locationElement ? locationElement.innerText : 'Location Not Found';
@@ -20,7 +21,8 @@ export function extractLeverDetails() {
     companyInfo: companyInfo,
     url: window.location.href,
     jobDescription: jobDescription,
+    jobDescRaw: jobDescRaw,
     postingSource: 'Lever',
-    location: location
+    locationInfo: location
   };
 }
