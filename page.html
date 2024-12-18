@@ -5,47 +5,64 @@
   <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-  <div class="header">
-    <h1>Job Application Dashboard</h1>
-    <div class="button-container">
-      <button id="uploadButton" class="icon-button" title="Upload from File">
-        <img src="icons/upload.png" alt="Upload" />
-      </button>
-      <input type="file" id="fileInput" style="display: none;" />
-      <button id="downloadButton" class="icon-button" title="Download to File">
-        <img src="icons/downloads.png" alt="Download" />
-      </button>
-      <button id="refreshButton" class="icon-button" title="Refresh Graphs">
-        <img src="icons/refresh.png" alt="Refresh" />
-      </button>
-      <button id="toggleDeletedJobsButton" class="icon-button" title="Show Deleted Jobs">
-        <img src="icons/trash-can.png" alt="Show Deleted Jobs" />
-      </button>
+  <div class="body-blur">
+    <div class="header">
+      <h1>Job Application Dashboard</h1>
+      <div class="button-container">
+        <button id="uploadButton" class="icon-button" title="Upload from File">
+          <img src="icons/upload.png" alt="Upload" />
+        </button>
+        <input type="file" id="fileInput" style="display: none;" />
+        <button id="downloadButton" class="icon-button" title="Download to File">
+          <img src="icons/downloads.png" alt="Download" />
+        </button>
+        <button id="refreshButton" class="icon-button" title="Refresh Graphs">
+          <img src="icons/refresh.png" alt="Refresh" />
+        </button>
+        <button id="toggleDeletedJobsButton" class="icon-button" title="Show Deleted Jobs">
+          <img src="icons/trash-can.png" alt="Show Deleted Jobs" />
+        </button>
+      </div>
+    </div>
+    <div class="table-container">
+      <table id="job-details">
+        <!-- Job details will be populated here -->
+      </table>
+    </div>
+    <div class="table-container" id="deletedJobsContainer" style="display: none;">
+      <h2>Deleted Job Applications</h2>
+      <table id="deleted-job-details">
+        <!-- Deleted job details will be populated here -->
+      </table>
+    </div>
+    <div class="chart-container">
+      <div class="chart-item">
+        <p id="totalJobsCount">Total Jobs: 0</p>
+        <canvas id="jobChart"></canvas>
+      </div>
+      <div class="chart-item">
+        <p id="jobsThisWeekCount">This Week: 0</p>
+        <canvas id="dateChart"></canvas>
+      </div>
+      <div class="chart-item">
+        <canvas id="sourceChart"></canvas>
+      </div>
     </div>
   </div>
-  <div class="table-container">
-    <table id="job-details">
-      <!-- Job details will be populated here -->
-    </table>
-  </div>
-  <div class="table-container" id="deletedJobsContainer" style="display: none;">
-    <h2>Deleted Job Applications</h2>
-    <table id="deleted-job-details">
-      <!-- Deleted job details will be populated here -->
-    </table>
-  </div>
-  <div class="chart-container">
-    <div class="chart-item">
-      <p id="totalJobsCount">Total Jobs: 0</p>
-      <canvas id="jobChart"></canvas>
+  <div class="details-popup" id="detailsPopup" style="display: none;">
+    <h2>Job Details</h2>
+    <div id="jobDetails">
+      <p><strong>Job Title:</strong> <span id="jobTitle"></span></p>
+      <p><strong>Company:</strong> <span id="companyInfo"></span></p>
+      <p><strong>Website URL:</strong> <span id="websiteURL"></span></p>
+      <p><strong>Location:</strong> <span id="locationInfo"></span></p>
+      <p><strong>Posting Source:</strong> <span id="postingSource"></span></p>
+      <p><strong>Application Date:</strong> <span id="applicationDate"></span></p>
+      <p><strong>Notes:</strong> <span id="notes"></span></p>
+      <p><strong>Stage:</strong> <span id="stage"></span></p>
+      <p><strong>Job Description:</strong> <div id="jobDescription"></div></p>
     </div>
-    <div class="chart-item">
-      <p id="jobsThisWeekCount">This Week: 0</p>
-      <canvas id="dateChart"></canvas>
-    </div>
-    <div class="chart-item">
-      <canvas id="sourceChart"></canvas>
-    </div>
+
   </div>
   <script src="page.js"></script>
   <script type="module" src="node_modules/chart.js/dist/chart.umd.js"></script>

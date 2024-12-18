@@ -11,11 +11,11 @@ export function extractIndeedDetails() {
         console.log(jobTitle)
         jobTitle = jobTitle.substring(0, jobTitleIndex);
     }
-
-    const locationElement = document.querySelector('[data-testid="job-location"]');
+//document.querySelector('[data-testid="job-location"]');
+    const locationElement = document.querySelector('[data-testid="inlineHeader-companyLocation"]');
     const location = locationElement ? locationElement.innerText : 'Location Not Found';
 
-    let companyInfoElement = document.querySelector('[data-testid="jobsearch-CompanyInfoContainer"]');
+    let companyInfoElement = document.querySelector('[data-testid="inlineHeader-companyName"]');
     if (!companyInfoElement) {
         companyInfoElement = document.querySelector('[data-testid="jobDetailSubtitle"]');
     }

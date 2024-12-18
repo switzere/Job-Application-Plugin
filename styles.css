@@ -232,3 +232,22 @@ canvas {
   background-color: #211c68;
 }
 
+.details-popup {
+  display: none;
+  position: fixed;
+  top: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  height: 80%;
+  border: 3px solid #000000;
+  z-index: 9;
+  background-color: #f0f4fc;
+  border-radius: 15px; /* Add curved corners */
+  padding: 20px; /* Add padding inside the popup */
+}
+
+.body-blur.blur {
+  filter: blur(5px);
+  pointer-events: none; /* Prevent interactions with the blurred content */
+}
