@@ -16,6 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let dateChartInstance;
   let sourceChartInstance;
 
+  let currentJobIndex = null;
+
   // Load job details from local storage and display them
   chrome.storage.local.get(['jobDetails', 'deletedJobDetails'], (result) => {
     const details = result.jobDetails || [];
@@ -57,9 +59,8 @@ document.addEventListener('DOMContentLoaded', () => {
           <th style="width: 20%;">Job Description</th>
           <th style="width: 10%;">Posting Source</th>
           <th style="width: 10%;">Timestamp</th>
-          <th style="width: 10%;">Notes</th>
           <th style="width: 10%;">Stage</th>
-          <th style="width: 10%;">Actions</th>
+          <th style="width: 20%;">Actions</th>
         </tr>
       `;
 
@@ -67,13 +68,12 @@ document.addEventListener('DOMContentLoaded', () => {
       details.forEach((detail, index) => {
         const row = document.createElement('tr');
         row.innerHTML = `
-          <td contenteditable="true" class="editable baseCol" data-field="jobTitle">${detail.jobTitle || 'N/A'}</td>
-          <td contenteditable="true" class="editable baseCol" data-field="companyInfo">${detail.companyInfo || 'N/A'}</td>
+          <td class="baseCol" data-field="jobTitle">${detail.jobTitle || 'N/A'}</td>
+          <td class="baseCol" data-field="companyInfo">${detail.companyInfo || 'N/A'}</td>
           <td class="baseCol short-url"><a href="${detail.url}" target="_blank" title="${detail.url}">${truncateText(detail.url, 30) || 'N/A'}</a></td>
-          <td contenteditable="true" class="editable baseCol desc" data-field="jobDescription" title="${detail.jobDescription || 'N/A'}">${detail.jobDescription || 'N/A'}</td>
-          <td contenteditable="true" class="editable baseCol" data-field="postingSource">${detail.postingSource || 'N/A'}</td>
+          <td class="baseCol desc" data-field="jobDescription" title="${detail.jobDescription || 'N/A'}">${detail.jobDescription || 'N/A'}</td>
+          <td class="baseCol" data-field="postingSource">${detail.postingSource || 'N/A'}</td>
           <td class="baseCol">${detail.timestamp || 'N/A'}</td>
-          <td contenteditable="true" class="editable baseCol" data-field="notes">${detail.notes || 'N/A'}</td>
           <td>
             <select class="stage-select" data-index="${index}">
               <option value="Applied" ${detail.stage === 'Applied' ? 'selected' : ''}>Applied</option>
@@ -83,18 +83,16 @@ document.addEventListener('DOMContentLoaded', () => {
               <option value="Ghosted" ${detail.stage === 'Ghosted' ? 'selected' : ''}>Ghosted</option>
             </select>
           </td>
-          <td><button class="delete-button" data-index="${index}">Delete</button></td>
+          <td>
+            <button class="details-button" data-index="${index}">Details</button>
+            <button class="delete-button" data-index="${index}">Delete</button>
+          </td>
         `;
         tbody.appendChild(row);
       });
 
       jobDetailsTable.appendChild(thead);
       jobDetailsTable.appendChild(tbody);
-
-      // Add event listeners to editable fields
-      document.querySelectorAll('.editable').forEach(cell => {
-        cell.addEventListener('input', handleCellEdit);
-      });
 
       // Add event listeners to stage dropdowns
       document.querySelectorAll('.stage-select').forEach(select => {
@@ -104,21 +102,13 @@ document.addEventListener('DOMContentLoaded', () => {
       // Add event listeners to delete buttons
       document.querySelectorAll('.delete-button').forEach(button => {
         button.addEventListener('click', handleDeleteRow);
+
+              // Add event listeners to details buttons
+      document.querySelectorAll('.details-button').forEach(button => {
+        button.addEventListener('click', handleDetailsButton);
+      });
       });
     }
-  }
-
-  // Handle cell edit
-  function handleCellEdit(event) {
-    const cell = event.target;
-    const field = cell.getAttribute('data-field');
-    const rowIndex = cell.parentElement.rowIndex - 1; // Adjust for header row
-
-    chrome.storage.local.get(['jobDetails'], (result) => {
-      const details = result.jobDetails || [];
-      details[rowIndex][field] = cell.textContent;
-      chrome.storage.local.set({ jobDetails: details });
-    });
   }
 
   // Handle stage change
@@ -162,6 +152,110 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Add event listener to confirm button
+  document.getElementById('confirmButton').addEventListener('click', handleConfirm);
+
+  // Add event listener to close button
+  document.getElementById('closeButton').addEventListener('click', closeForm);
+
+  // Handle details button
+  function handleDetailsButton(event) {
+    event.stopPropagation();
+    document.getElementById('detailsPopup').style.display = 'block';
+
+    document.querySelector('.body-blur').classList.add('blur'); // Add blur class to content-wrapper
+    const button = event.target;
+    currentJobIndex = button.getAttribute('data-index'); // Store the index of the job being edited
+
+
+    chrome.storage.local.get(['jobDetails'], (result) => {
+      const details = result.jobDetails || [];
+      const jobDetail = details[currentJobIndex];
+      console.log(jobDetail);
+
+      // Populate the details popup
+      document.getElementById('jobTitle').value = jobDetail.jobTitle || 'N/A';
+      document.getElementById('companyInfo').value = jobDetail.companyInfo || 'N/A';
+      document.getElementById('websiteURL').value = jobDetail.url || 'N/A';
+      document.getElementById('jobDescription').innerHTML = jobDetail.jobDescription || 'N/A';
+      document.getElementById('locationInfo').value = jobDetail.locationInfo || 'N/A';
+      document.getElementById('applicationDate').value = jobDetail.timestamp || 'N/A';
+      document.getElementById('notes').value = jobDetail.notes || 'N/A';
+      document.getElementById('stage').value = jobDetail.stage || 'N/A';
+      document.getElementById('postingSource').value = jobDetail.postingSource || 'N/A';
+
+    });
+  }
+
+  function closeForm() {
+    document.getElementById("detailsPopup").style.display = "none";
+    document.querySelector('.body-blur').classList.remove('blur'); // Remove blur class from content-wrapper
+    currentJobIndex = null; // Reset the current job index
+  }
+
+  // Handle confirm button click
+function handleConfirm() {
+  if (currentJobIndex !== null) {
+    chrome.storage.local.get(['jobDetails'], (result) => {
+      const details = result.jobDetails || [];
+      const jobDetail = details[currentJobIndex];
+
+      // Update the job details with the values from the form
+      jobDetail.jobTitle = document.getElementById('jobTitle').value;
+      jobDetail.companyInfo = document.getElementById('companyInfo').value;
+      jobDetail.url = document.getElementById('websiteURL').value;
+      jobDetail.jobDescription = document.getElementById('jobDescription').innerHTML;
+      jobDetail.locationInfo = document.getElementById('locationInfo').value;
+      jobDetail.timestamp = document.getElementById('applicationDate').value;
+      jobDetail.notes = document.getElementById('notes').value;
+      jobDetail.stage = document.getElementById('stage').value;
+      jobDetail.postingSource = document.getElementById('postingSource').value;
+
+      // Save the updated job details back to storage
+      chrome.storage.local.set({ jobDetails: details }, () => {
+        displayJobDetails(details); // Refresh the table
+        closeForm(); // Close the details popup
+      });
+    });
+  }
+}
+
+
+  // window.onclick = function(event) {
+  //   var form = document.getElementById("detailsPopup");
+  //   if (event.target != form && !form.contains(event.target)) {
+  //     closeForm();
+  //   }
+  // }
+
+  // // Open details popup
+  // function openDetailsPopup(detail) {
+  //   const popup = window.open('', 'Job Details', 'width=600,height=400');
+  //   popup.document.write(`
+  //     <html>
+  //     <head>
+  //       <title>Job Details</title>
+  //       <style>
+  //         body { font-family: Arial, sans-serif; padding: 20px; }
+  //         h2 { margin-top: 0; }
+  //         p { margin: 5px 0; }
+  //       </style>
+  //     </head>
+  //     <body>
+  //       <h2>Job Details</h2>
+  //       <p><strong>Job Title:</strong> ${detail.jobTitle}</p>
+  //       <p><strong>Company:</strong> ${detail.companyInfo}</p>
+  //       <p><strong>URL:</strong> <a href="${detail.url}" target="_blank">${detail.url}</a></p>
+  //       <p><strong>Location:</strong> ${detail.locationInfo}</p>
+  //       <p><strong>Posting Source:</strong> ${detail.postingSource}</p>
+  //       <p><strong>Job Description:</strong> ${detail.jobDescription}</p>
+  //       <p><strong>Stage:</strong> ${detail.stage}</p>
+  //       <p><strong>Timestamp:</strong> ${detail.timestamp}</p>
+  //     </body>
+  //     </html>
+  //   `);
+  // }
+
     // Restore deleted job
   function restoreDeletedJob(index) {
     chrome.storage.local.get(['jobDetails', 'deletedJobDetails'], (result) => {
@@ -181,106 +275,106 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
- // Display deleted job details in a table
-function displayDeletedJobDetails(deletedDetails) {
-  deletedJobDetailsTable.innerHTML = '';
-  if (deletedDetails.length === 0) {
-    deletedJobDetailsTable.innerHTML = '<p>No deleted job applications.</p>';
-  } else {
-    const thead = document.createElement('thead');
-    const tbody = document.createElement('tbody');
+  // Display deleted job details in a table
+  function displayDeletedJobDetails(deletedDetails) {
+    deletedJobDetailsTable.innerHTML = '';
+    if (deletedDetails.length === 0) {
+      deletedJobDetailsTable.innerHTML = '<p>No deleted job applications.</p>';
+    } else {
+      const thead = document.createElement('thead');
+      const tbody = document.createElement('tbody');
 
-    // Create table headers
-    thead.innerHTML = `
-      <tr>
-        <th style="width: 15%;">Job Title</th>
-        <th style="width: 15%;">Company Info</th>
-        <th style="width: 10%;">URL</th>
-        <th style="width: 20%;">Job Description</th>
-        <th style="width: 10%;">Posting Source</th>
-        <th style="width: 10%;">Timestamp</th>
-        <th style="width: 10%;">Notes</th>
-        <th style="width: 10%;">Stage</th>
-        <th style="width: 10%;">Actions</th>
-      </tr>
-    `;
-
-    // Create table rows
-    deletedDetails.forEach((detail, index) => {
-      const row = document.createElement('tr');
-      row.innerHTML = `
-        <td>${detail.jobTitle || 'N/A'}</td>
-        <td>${detail.companyInfo || 'N/A'}</td>
-        <td><a href="${detail.url}" target="_blank">${truncateText(detail.url, 30) || 'N/A'}</td>
-        <td>${truncateText(detail.jobDescription, 50) || 'N/A'}</td>
-        <td>${detail.postingSource || 'N/A'}</td>
-        <td>${detail.timestamp || 'N/A'}</td>
-        <td>${detail.notes || 'N/A'}</td>
-        <td>${detail.stage || 'N/A'}</td>
-        <td>
-          <button class="restore-button" data-index="${index}">Restore</button>
-          <button class="permanent-delete-button" data-index="${index}">Permanent Delete</button>
-        </td>
+      // Create table headers
+      thead.innerHTML = `
+        <tr>
+          <th style="width: 15%;">Job Title</th>
+          <th style="width: 15%;">Company Info</th>
+          <th style="width: 10%;">URL</th>
+          <th style="width: 20%;">Job Description</th>
+          <th style="width: 10%;">Posting Source</th>
+          <th style="width: 10%;">Timestamp</th>
+          <th style="width: 10%;">Notes</th>
+          <th style="width: 10%;">Stage</th>
+          <th style="width: 10%;">Actions</th>
+        </tr>
       `;
-      tbody.appendChild(row);
-    });
 
-    deletedJobDetailsTable.appendChild(thead);
-    deletedJobDetailsTable.appendChild(tbody);
-
-    // Add event listeners to restore buttons
-    document.querySelectorAll('.restore-button').forEach(button => {
-      button.addEventListener('click', (event) => {
-        const index = event.target.getAttribute('data-index');
-        restoreDeletedJob(index);
+      // Create table rows
+      deletedDetails.forEach((detail, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${detail.jobTitle || 'N/A'}</td>
+          <td>${detail.companyInfo || 'N/A'}</td>
+          <td><a href="${detail.url}" target="_blank">${truncateText(detail.url, 30) || 'N/A'}</td>
+          <td>${truncateText(detail.jobDescription, 50) || 'N/A'}</td>
+          <td>${detail.postingSource || 'N/A'}</td>
+          <td>${detail.timestamp || 'N/A'}</td>
+          <td>${detail.notes || 'N/A'}</td>
+          <td>${detail.stage || 'N/A'}</td>
+          <td>
+            <button class="restore-button" data-index="${index}">Restore</button>
+            <button class="permanent-delete-button" data-index="${index}">Permanent Delete</button>
+          </td>
+        `;
+        tbody.appendChild(row);
       });
-    });
 
-    // Add event listeners to permanent delete buttons
-    document.querySelectorAll('.permanent-delete-button').forEach(button => {
-      button.addEventListener('click', (event) => {
-        const index = event.target.getAttribute('data-index');
-        permanentlyDeleteJob(index);
+      deletedJobDetailsTable.appendChild(thead);
+      deletedJobDetailsTable.appendChild(tbody);
+
+      // Add event listeners to restore buttons
+      document.querySelectorAll('.restore-button').forEach(button => {
+        button.addEventListener('click', (event) => {
+          const index = event.target.getAttribute('data-index');
+          restoreDeletedJob(index);
+        });
+      });
+
+      // Add event listeners to permanent delete buttons
+      document.querySelectorAll('.permanent-delete-button').forEach(button => {
+        button.addEventListener('click', (event) => {
+          const index = event.target.getAttribute('data-index');
+          permanentlyDeleteJob(index);
+        });
+      });
+    }
+  }
+
+  // Permanently delete job
+  function permanentlyDeleteJob(index) {
+    chrome.storage.local.get(['deletedJobDetails'], (result) => {
+      let deletedDetails = result.deletedJobDetails || [];
+      deletedDetails.splice(index, 1); // Remove the job from the deleted details array
+
+      chrome.storage.local.set({ deletedJobDetails: deletedDetails }, () => {
+        displayDeletedJobDetails(deletedDetails); // Refresh the deleted job details table
       });
     });
   }
-}
 
-// Permanently delete job
-function permanentlyDeleteJob(index) {
-  chrome.storage.local.get(['deletedJobDetails'], (result) => {
-    let deletedDetails = result.deletedJobDetails || [];
-    deletedDetails.splice(index, 1); // Remove the job from the deleted details array
-
-    chrome.storage.local.set({ deletedJobDetails: deletedDetails }, () => {
-      displayDeletedJobDetails(deletedDetails); // Refresh the deleted job details table
-    });
+  // Handle file selection and upload
+  uploadButton.addEventListener('click', () => {
+    fileInput.click();
   });
-}
 
-// Handle file selection and upload
-uploadButton.addEventListener('click', () => {
-  fileInput.click();
-});
-
-fileInput.addEventListener('change', () => {
-  const file = fileInput.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const content = e.target.result;
-      const details = JSON.parse(content);
-      chrome.storage.local.set({ jobDetails: details }, () => {
-        displayJobDetails(details); // Refresh the table
-        createJobChart(details); // Refresh the chart
-        createDateChart(details); // Refresh the date chart
-        createSourceChart(details); // Refresh the source chart
-        updateCounts(details); // Update counts
-      });
-    };
-    reader.readAsText(file);
-  }
-});
+  fileInput.addEventListener('change', () => {
+    const file = fileInput.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const content = e.target.result;
+        const details = JSON.parse(content);
+        chrome.storage.local.set({ jobDetails: details }, () => {
+          displayJobDetails(details); // Refresh the table
+          createJobChart(details); // Refresh the chart
+          createDateChart(details); // Refresh the date chart
+          createSourceChart(details); // Refresh the source chart
+          updateCounts(details); // Update counts
+        });
+      };
+      reader.readAsText(file);
+    }
+  });
 
 
   // Handle file download
@@ -359,57 +453,57 @@ fileInput.addEventListener('change', () => {
     });
   }
 
-// Create a line chart of job applications by date
-function createDateChart(details) {
-  if (dateChartInstance) {
-    dateChartInstance.destroy();
-  }
+  // Create a line chart of job applications by date
+  function createDateChart(details) {
+    if (dateChartInstance) {
+      dateChartInstance.destroy();
+    }
 
-  const dates = details.map(detail => new Date(detail.timestamp));
-  const dateCounts = dates.reduce((counts, date) => {
-    const dateString = date.toISOString().split('T')[0];
-    counts[dateString] = (counts[dateString] || 0) + 1;
-    return counts;
-  }, {});
+    const dates = details.map(detail => new Date(detail.timestamp));
+    const dateCounts = dates.reduce((counts, date) => {
+      const dateString = date.toISOString().split('T')[0];
+      counts[dateString] = (counts[dateString] || 0) + 1;
+      return counts;
+    }, {});
 
-  // Calculate cumulative totals
-  const cumulativeCounts = [];
-  let cumulativeTotal = 0;
-  Object.keys(dateCounts).forEach(date => {
-    cumulativeTotal += dateCounts[date];
-    cumulativeCounts.push(cumulativeTotal);
-  });
+    // Calculate cumulative totals
+    const cumulativeCounts = [];
+    let cumulativeTotal = 0;
+    Object.keys(dateCounts).forEach(date => {
+      cumulativeTotal += dateCounts[date];
+      cumulativeCounts.push(cumulativeTotal);
+    });
 
-  const chartData = {
-    labels: Object.keys(dateCounts),
-    datasets: [{
-      label: 'Cumulative Applications by Date',
-      data: cumulativeCounts,
-      backgroundColor: 'rgba(153, 102, 255, 0.2)',
-      borderColor: 'rgba(153, 102, 255, 1)',
-      borderWidth: 1,
-      fill: false
-    }]
-  };
+    const chartData = {
+      labels: Object.keys(dateCounts),
+      datasets: [{
+        label: 'Cumulative Applications by Date',
+        data: cumulativeCounts,
+        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+        borderColor: 'rgba(153, 102, 255, 1)',
+        borderWidth: 1,
+        fill: false
+      }]
+    };
 
-  dateChartInstance = new Chart(dateChartCanvas, {
-    type: 'line',
-    data: chartData,
-    options: {
-      scales: {
-        x: {
-          type: 'time',
-          time: {
-            unit: 'day'
+    dateChartInstance = new Chart(dateChartCanvas, {
+      type: 'line',
+      data: chartData,
+      options: {
+        scales: {
+          x: {
+            type: 'time',
+            time: {
+              unit: 'day'
+            }
+          },
+          y: {
+            beginAtZero: true
           }
-        },
-        y: {
-          beginAtZero: true
         }
       }
-    }
-  });
-}
+    });
+  }
 
   // Create a pie chart of job applications by posting source
   function createSourceChart(details) {

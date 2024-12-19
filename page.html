@@ -5,46 +5,84 @@
   <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-  <div class="header">
-    <h1>Job Application Dashboard</h1>
-    <div class="button-container">
-      <button id="uploadButton" class="icon-button" title="Upload from File">
-        <img src="icons/upload.png" alt="Upload" />
-      </button>
-      <input type="file" id="fileInput" style="display: none;" />
-      <button id="downloadButton" class="icon-button" title="Download to File">
-        <img src="icons/downloads.png" alt="Download" />
-      </button>
-      <button id="refreshButton" class="icon-button" title="Refresh Graphs">
-        <img src="icons/refresh.png" alt="Refresh" />
-      </button>
-      <button id="toggleDeletedJobsButton" class="icon-button" title="Show Deleted Jobs">
-        <img src="icons/trash-can.png" alt="Show Deleted Jobs" />
-      </button>
+  <div class="body-blur">
+    <div class="header">
+      <h1>Job Application Dashboard</h1>
+      <div class="button-container">
+        <button id="uploadButton" class="icon-button" title="Upload from File">
+          <img src="icons/upload.png" alt="Upload" />
+        </button>
+        <input type="file" id="fileInput" style="display: none;" />
+        <button id="downloadButton" class="icon-button" title="Download to File">
+          <img src="icons/downloads.png" alt="Download" />
+        </button>
+        <button id="refreshButton" class="icon-button" title="Refresh Graphs">
+          <img src="icons/refresh.png" alt="Refresh" />
+        </button>
+        <button id="toggleDeletedJobsButton" class="icon-button" title="Show Deleted Jobs">
+          <img src="icons/trash-can.png" alt="Show Deleted Jobs" />
+        </button>
+      </div>
+    </div>
+    <div class="table-container">
+      <table id="job-details">
+        <!-- Job details will be populated here -->
+      </table>
+    </div>
+    <div class="table-container" id="deletedJobsContainer" style="display: none;">
+      <h2>Deleted Job Applications</h2>
+      <table id="deleted-job-details">
+        <!-- Deleted job details will be populated here -->
+      </table>
+    </div>
+    <div class="chart-container">
+      <div class="chart-item">
+        <p id="totalJobsCount">Total Jobs: 0</p>
+        <canvas id="jobChart"></canvas>
+      </div>
+      <div class="chart-item">
+        <p id="jobsThisWeekCount">This Week: 0</p>
+        <canvas id="dateChart"></canvas>
+      </div>
+      <div class="chart-item">
+        <canvas id="sourceChart"></canvas>
+      </div>
     </div>
   </div>
-  <div class="table-container">
-    <table id="job-details">
-      <!-- Job details will be populated here -->
-    </table>
-  </div>
-  <div class="table-container" id="deletedJobsContainer" style="display: none;">
-    <h2>Deleted Job Applications</h2>
-    <table id="deleted-job-details">
-      <!-- Deleted job details will be populated here -->
-    </table>
-  </div>
-  <div class="chart-container">
-    <div class="chart-item">
-      <p id="totalJobsCount">Total Jobs: 0</p>
-      <canvas id="jobChart"></canvas>
+  <div class="details-popup" id="detailsPopup" style="display: none;">
+    <div class="jobDetailsTitle">
+      Job Details
+      <div class="button-container">
+        <button id="confirmButton" class="icon-button" title="Confirm">
+          <img src="icons/confirm.png" alt="Save" />
+        </button>
+        <button id="closeButton" class="icon-button" title="Close">
+          <img src="icons/close.png" alt="Close" />
+        </button>
+      </div>
     </div>
-    <div class="chart-item">
-      <p id="jobsThisWeekCount">This Week: 0</p>
-      <canvas id="dateChart"></canvas>
-    </div>
-    <div class="chart-item">
-      <canvas id="sourceChart"></canvas>
+    <div class="details-container">
+      <div class="details-left">
+        <p><span class="title">Job Title:</span> <textarea class="details-info" id="jobTitle"></textarea></p>
+        <p><span class="title">Company:</span> <textarea class="details-info" id="companyInfo"></textarea></p>
+        <p><span class="title">Location:</span> <textarea class="details-info" id="locationInfo"></textarea></p>
+        <p><span class="title">Stage:</span> 
+          <select id="stage" class="details-info">
+            <option value="Applied">Applied</option>
+            <option value="Interview 1">Interview 1</option>
+            <option value="Interview 2">Interview 2</option>
+            <option value="Rejected">Rejected</option>
+            <option value="Ghosted">Ghosted</option>
+          </select>
+        </p>
+        <p><span class="title">Application Date:</span> <textarea class="details-info" id="applicationDate"></textarea></p>
+        <p><span class="title">Website URL:</span> <textarea class="details-info" id="websiteURL"></textarea></p>
+        <p><span class="title">Posting Source:</span> <textarea class="details-info" id="postingSource"></textarea></p>
+        <p><span class="title">Notes:</span> <textarea class="details-info" id="notes"></textarea></p>
+      </div>
+      <div class="details-right">
+        <p><span class="title">Job Description:</span><div id="jobDescription" contenteditable="true"></div></p>
+      </div>
     </div>
   </div>
   <script src="page.js"></script>

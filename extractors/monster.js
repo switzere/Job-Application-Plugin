@@ -12,13 +12,15 @@ export function extractMonsterDetails() {
     const datePosted = datePostedElement ? datePostedElement.innerText : 'Date Posted Not Found';
 
     const jobDescriptionElement = document.querySelector('[data-testid="svx-description-container-inner"]');
-    const jobDescription = jobDescriptionElement ? jobDescriptionElement.innerText : 'Job Description Not Found';
+    const jobDescription = jobDescriptionElement ? jobDescriptionElement.innerHTML : 'Job Description Not Found';
+    const jobDescRaw = jobDescriptionElement ? jobDescriptionElement.innerText : 'Job Description Not Found';
 
   return {
     jobTitle: jobTitle,
     companyInfo: companyInfo,
     url: window.location.href,
     jobDescription: jobDescription,
+    jobDescRaw: jobDescRaw,
     postingSource: 'Monster'
   };
 }

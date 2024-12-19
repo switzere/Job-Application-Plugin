@@ -11,3 +11,23 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     chrome.tabs.create({ url: chrome.runtime.getURL('page.html') });
   }
 });
+
+chrome.action.onClicked.addListener((tab) => {
+  chrome.windows.create({
+    url: chrome.runtime.getURL('popup.html'),
+    type: 'popup',
+    width: 400,
+    height: 600
+  }, (newWindow) => {
+    chrome.runtime.onMessage.addListener(function listener(message, sender, sendResponse) {
+      if (message.action === 'popupReady') {
+        chrome.runtime.onMessage.removeListener(listener);
+        chrome.runtime.sendMessage({
+          action: 'openPopup',
+          tabId: tab.id,
+          tabUrl: tab.url
+        });
+      }
+    });
+  });
+});
