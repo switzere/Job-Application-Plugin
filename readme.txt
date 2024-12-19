@@ -1,6 +1,6 @@
 Job Application Extension
 
 TODO:
-make look nicer
-make editable
-save and cancel button
+shrink table rows
+adjust what is shown in table
+fix popup

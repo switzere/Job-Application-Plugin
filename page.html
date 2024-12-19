@@ -50,19 +50,40 @@
     </div>
   </div>
   <div class="details-popup" id="detailsPopup" style="display: none;">
-    <h2>Job Details</h2>
-    <div id="jobDetails">
-      <p><strong>Job Title:</strong> <span id="jobTitle"></span></p>
-      <p><strong>Company:</strong> <span id="companyInfo"></span></p>
-      <p><strong>Website URL:</strong> <span id="websiteURL"></span></p>
-      <p><strong>Location:</strong> <span id="locationInfo"></span></p>
-      <p><strong>Posting Source:</strong> <span id="postingSource"></span></p>
-      <p><strong>Application Date:</strong> <span id="applicationDate"></span></p>
-      <p><strong>Notes:</strong> <span id="notes"></span></p>
-      <p><strong>Stage:</strong> <span id="stage"></span></p>
-      <p><strong>Job Description:</strong> <div id="jobDescription"></div></p>
+    <div class="jobDetailsTitle">
+      Job Details
+      <div class="button-container">
+        <button id="confirmButton" class="icon-button" title="Confirm">
+          <img src="icons/confirm.png" alt="Save" />
+        </button>
+        <button id="closeButton" class="icon-button" title="Close">
+          <img src="icons/close.png" alt="Close" />
+        </button>
+      </div>
     </div>
-
+    <div class="details-container">
+      <div class="details-left">
+        <p><span class="title">Job Title:</span> <textarea class="details-info" id="jobTitle"></textarea></p>
+        <p><span class="title">Company:</span> <textarea class="details-info" id="companyInfo"></textarea></p>
+        <p><span class="title">Location:</span> <textarea class="details-info" id="locationInfo"></textarea></p>
+        <p><span class="title">Stage:</span> 
+          <select id="stage" class="details-info">
+            <option value="Applied">Applied</option>
+            <option value="Interview 1">Interview 1</option>
+            <option value="Interview 2">Interview 2</option>
+            <option value="Rejected">Rejected</option>
+            <option value="Ghosted">Ghosted</option>
+          </select>
+        </p>
+        <p><span class="title">Application Date:</span> <textarea class="details-info" id="applicationDate"></textarea></p>
+        <p><span class="title">Website URL:</span> <textarea class="details-info" id="websiteURL"></textarea></p>
+        <p><span class="title">Posting Source:</span> <textarea class="details-info" id="postingSource"></textarea></p>
+        <p><span class="title">Notes:</span> <textarea class="details-info" id="notes"></textarea></p>
+      </div>
+      <div class="details-right">
+        <p><span class="title">Job Description:</span><div id="jobDescription" contenteditable="true"></div></p>
+      </div>
+    </div>
   </div>
   <script src="page.js"></script>
   <script type="module" src="node_modules/chart.js/dist/chart.umd.js"></script>

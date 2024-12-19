@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
           //jobDetailsDiv.style.display = 'none';
         }, { once: true }); // Ensure the event listener is added only once
       } else {
-        statusMessage.textContent = 'Failed to Record Details.';
+        console.log('Failed to Record Details.');
       }
     });
   }

@@ -16,6 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let dateChartInstance;
   let sourceChartInstance;
 
+  let currentJobIndex = null;
+
   // Load job details from local storage and display them
   chrome.storage.local.get(['jobDetails', 'deletedJobDetails'], (result) => {
     const details = result.jobDetails || [];
@@ -150,6 +152,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Add event listener to confirm button
+  document.getElementById('confirmButton').addEventListener('click', handleConfirm);
+
+  // Add event listener to close button
+  document.getElementById('closeButton').addEventListener('click', closeForm);
+
   // Handle details button
   function handleDetailsButton(event) {
     event.stopPropagation();
@@ -157,23 +165,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelector('.body-blur').classList.add('blur'); // Add blur class to content-wrapper
     const button = event.target;
-    const rowIndex = button.getAttribute('data-index');
+    currentJobIndex = button.getAttribute('data-index'); // Store the index of the job being edited
+
 
     chrome.storage.local.get(['jobDetails'], (result) => {
       const details = result.jobDetails || [];
-      const jobDetail = details[rowIndex];
+      const jobDetail = details[currentJobIndex];
       console.log(jobDetail);
 
       // Populate the details popup
-      document.getElementById('jobTitle').textContent = jobDetail.jobTitle || 'N/A';
-      document.getElementById('companyInfo').textContent = jobDetail.companyInfo || 'N/A';
-      document.getElementById('websiteURL').textContent = jobDetail.url || 'N/A';
+      document.getElementById('jobTitle').value = jobDetail.jobTitle || 'N/A';
+      document.getElementById('companyInfo').value = jobDetail.companyInfo || 'N/A';
+      document.getElementById('websiteURL').value = jobDetail.url || 'N/A';
       document.getElementById('jobDescription').innerHTML = jobDetail.jobDescription || 'N/A';
-      document.getElementById('postingSource').textContent = jobDetail.postingSource || 'N/A';
-      document.getElementById('locationInfo').textContent = jobDetail.locationInfo || 'N/A';
-      document.getElementById('applicationDate').textContent = jobDetail.timestamp || 'N/A';
-      document.getElementById('notes').textContent = jobDetail.notes || 'N/A';
-      document.getElementById('stage').textContent = jobDetail.stage || 'N/A';
+      document.getElementById('locationInfo').value = jobDetail.locationInfo || 'N/A';
+      document.getElementById('applicationDate').value = jobDetail.timestamp || 'N/A';
+      document.getElementById('notes').value = jobDetail.notes || 'N/A';
+      document.getElementById('stage').value = jobDetail.stage || 'N/A';
+      document.getElementById('postingSource').value = jobDetail.postingSource || 'N/A';
 
     });
   }
@@ -181,14 +190,43 @@ document.addEventListener('DOMContentLoaded', () => {
   function closeForm() {
     document.getElementById("detailsPopup").style.display = "none";
     document.querySelector('.body-blur').classList.remove('blur'); // Remove blur class from content-wrapper
+    currentJobIndex = null; // Reset the current job index
   }
 
-  window.onclick = function(event) {
-    var form = document.getElementById("detailsPopup");
-    if (event.target != form && !form.contains(event.target)) {
-      closeForm();
-    }
+  // Handle confirm button click
+function handleConfirm() {
+  if (currentJobIndex !== null) {
+    chrome.storage.local.get(['jobDetails'], (result) => {
+      const details = result.jobDetails || [];
+      const jobDetail = details[currentJobIndex];
+
+      // Update the job details with the values from the form
+      jobDetail.jobTitle = document.getElementById('jobTitle').value;
+      jobDetail.companyInfo = document.getElementById('companyInfo').value;
+      jobDetail.url = document.getElementById('websiteURL').value;
+      jobDetail.jobDescription = document.getElementById('jobDescription').innerHTML;
+      jobDetail.locationInfo = document.getElementById('locationInfo').value;
+      jobDetail.timestamp = document.getElementById('applicationDate').value;
+      jobDetail.notes = document.getElementById('notes').value;
+      jobDetail.stage = document.getElementById('stage').value;
+      jobDetail.postingSource = document.getElementById('postingSource').value;
+
+      // Save the updated job details back to storage
+      chrome.storage.local.set({ jobDetails: details }, () => {
+        displayJobDetails(details); // Refresh the table
+        closeForm(); // Close the details popup
+      });
+    });
   }
+}
+
+
+  // window.onclick = function(event) {
+  //   var form = document.getElementById("detailsPopup");
+  //   if (event.target != form && !form.contains(event.target)) {
+  //     closeForm();
+  //   }
+  // }
 
   // // Open details popup
   // function openDetailsPopup(detail) {
