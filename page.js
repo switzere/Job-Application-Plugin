@@ -53,10 +53,9 @@ document.addEventListener('DOMContentLoaded', () => {
       // Create table headers
       thead.innerHTML = `
         <tr>
-          <th style="width: 15%;">Job Title</th>
+          <th style="width: 20%;">Job Title</th>
           <th style="width: 15%;">Company Info</th>
-          <th style="width: 10%;">URL</th>
-          <th style="width: 20%;">Job Description</th>
+          <th style="width: 15%;">URL</th>
           <th style="width: 10%;">Posting Source</th>
           <th style="width: 10%;">Timestamp</th>
           <th style="width: 10%;">Stage</th>
@@ -71,7 +70,6 @@ document.addEventListener('DOMContentLoaded', () => {
           <td class="baseCol" data-field="jobTitle">${detail.jobTitle || 'N/A'}</td>
           <td class="baseCol" data-field="companyInfo">${detail.companyInfo || 'N/A'}</td>
           <td class="baseCol short-url"><a href="${detail.url}" target="_blank" title="${detail.url}">${truncateText(detail.url, 30) || 'N/A'}</a></td>
-          <td class="baseCol desc" data-field="jobDescription" title="${detail.jobDescription || 'N/A'}">${detail.jobDescription || 'N/A'}</td>
           <td class="baseCol" data-field="postingSource">${detail.postingSource || 'N/A'}</td>
           <td class="baseCol">${detail.timestamp || 'N/A'}</td>
           <td>
@@ -227,6 +225,8 @@ function handleConfirm() {
   //     closeForm();
   //   }
   // }
+
+  
 
   // // Open details popup
   // function openDetailsPopup(detail) {

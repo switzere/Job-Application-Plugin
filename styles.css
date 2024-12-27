@@ -195,13 +195,39 @@ canvas {
 
 #jobDetails textarea {
   width: 100%;
-  padding: 10px -10px;
+  /*padding: 10px -10px;*/
   border: 1px solid #ddd;
   border-radius: 5px;
   box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
 }
 
+#jobDetails-recording {
+  padding: 20px;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin: 20px;
+  max-width: calc(100% - 40px); /* Ensure it fits within the popup */
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
 
+#jobDetails-recording h2 {
+  margin-top: 0;
+}
+
+#jobDetails-recording p {
+  margin: 10px 0;
+}
+
+#jobDetails-recording textarea {
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
 
 #jobTitle, #companyInfo, #websiteURL, #postingSource, #locationInfo, #applicationDate {
   height: 15px; /* Make these text areas thinner */
@@ -310,6 +336,11 @@ textarea {
   border-radius: 5px; /* Add border radius to match other text areas */
   box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1); /* Add inner shadow for consistency */
   resize: vertical; /* Allow vertical resizing */
+}
+
+#jobDetails-recording textarea {
+  height: 15px !important;
+  padding: 0px !important;
 }
 
 .title {
