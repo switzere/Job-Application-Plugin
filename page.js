@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
   const jobDetailsTable = document.getElementById('job-details');
   const deletedJobDetailsTable = document.getElementById('deleted-job-details');
-  const fileInput = document.getElementById('fileInput');
-  const downloadButton = document.getElementById('downloadButton');
+  //const fileInput = document.getElementById('fileInput');
+ // const downloadButton = document.getElementById('downloadButton');
   const refreshButton = document.getElementById('refreshButton');
   const toggleDeletedJobsButton = document.getElementById('toggleDeletedJobsButton');
   const deletedJobsContainer = document.getElementById('deletedJobsContainer');
@@ -353,44 +353,44 @@ function handleConfirm() {
   }
 
   // Handle file selection and upload
-  uploadButton.addEventListener('click', () => {
-    fileInput.click();
-  });
+  // uploadButton.addEventListener('click', () => {
+  //   fileInput.click();
+  // });
 
-  fileInput.addEventListener('change', () => {
-    const file = fileInput.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const content = e.target.result;
-        const details = JSON.parse(content);
-        chrome.storage.local.set({ jobDetails: details }, () => {
-          displayJobDetails(details); // Refresh the table
-          createJobChart(details); // Refresh the chart
-          createDateChart(details); // Refresh the date chart
-          createSourceChart(details); // Refresh the source chart
-          updateCounts(details); // Update counts
-        });
-      };
-      reader.readAsText(file);
-    }
-  });
+  // fileInput.addEventListener('change', () => {
+  //   const file = fileInput.files[0];
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.onload = (e) => {
+  //       const content = e.target.result;
+  //       const details = JSON.parse(content);
+  //       chrome.storage.local.set({ jobDetails: details }, () => {
+  //         displayJobDetails(details); // Refresh the table
+  //         createJobChart(details); // Refresh the chart
+  //         createDateChart(details); // Refresh the date chart
+  //         createSourceChart(details); // Refresh the source chart
+  //         updateCounts(details); // Update counts
+  //       });
+  //     };
+  //     reader.readAsText(file);
+  //   }
+  // });
 
 
   // Handle file download
-  downloadButton.addEventListener('click', () => {
-    chrome.storage.local.get(['jobDetails'], (result) => {
-      const details = result.jobDetails || [];
-      const content = JSON.stringify(details, null, 2);
-      const blob = new Blob([content], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'job_applications.json';
-      a.click();
-      URL.revokeObjectURL(url);
-    });
-  });
+  // downloadButton.addEventListener('click', () => {
+  //   chrome.storage.local.get(['jobDetails'], (result) => {
+  //     const details = result.jobDetails || [];
+  //     const content = JSON.stringify(details, null, 2);
+  //     const blob = new Blob([content], { type: 'application/json' });
+  //     const url = URL.createObjectURL(blob);
+  //     const a = document.createElement('a');
+  //     a.href = url;
+  //     a.download = 'job_applications.json';
+  //     a.click();
+  //     URL.revokeObjectURL(url);
+  //   });
+  // });
 
   // Handle refresh button
   refreshButton.addEventListener('click', () => {
