@@ -31,3 +31,13 @@ chrome.action.onClicked.addListener((tab) => {
     });
   });
 });
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.type === 'NEW_JOB_APPLICATION' && message.job) {
+    chrome.storage.local.get(['jobDetails'], (result) => {
+      const jobDetails = result.jobDetails || [];
+      jobDetails.push(message.job);
+      chrome.storage.local.set({ jobDetails });
+    });
+  }
+});

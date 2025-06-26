@@ -1,3 +1,5 @@
+import { preprocessText, extractKeyTerms, printHi } from './nlp.js';
+
 document.addEventListener('DOMContentLoaded', () => {
   const jobDetailsTable = document.getElementById('job-details');
   const deletedJobDetailsTable = document.getElementById('deleted-job-details');
@@ -17,6 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let sourceChartInstance;
 
   let currentJobIndex = null;
+
+  printHi();
 
   // Load job details from local storage and display them
   chrome.storage.local.get(['jobDetails', 'deletedJobDetails'], (result) => {
@@ -384,11 +388,15 @@ function handleConfirm() {
       const content = JSON.stringify(details, null, 2);
       const blob = new Blob([content], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'job_applications.json';
-      a.click();
-      URL.revokeObjectURL(url);
+      // Use chrome.downloads.download to initiate the download
+      chrome.downloads.download({
+        url: url,
+        filename: 'job_applications.json',
+        saveAs: false
+      }, () => {
+        // Revoke the temporary URL to free up resources
+        URL.revokeObjectURL(url);
+      });
     });
   });
 

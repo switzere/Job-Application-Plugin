@@ -1,23 +1,37 @@
 {
-  "manifest_version": 3,
-  "name": "Job Application Recorder",
-  "version": "3.2",
-  "description": "Record and visualize job application details.",
-  "action": {},
-  "icons": {
-    "16": "icons/icon16.png",
-    "48": "icons/icon48.png",
-    "128": "icons/icon128.png"
-  },
-  "permissions": [
-    "activeTab",
-    "downloads",
-    "scripting",
-    "storage",
-    "contextMenus",
-    "windows"
-  ],
-  "background": {
-    "service_worker": "background.js"
-  }
+	"manifest_version": 3,
+	"name": "Job Application Recorder",
+	"version": "3.2",
+	"description": "Record and visualize job application details.",
+	"action": {},
+	"icons": {
+		"16": "icons/icon16.png",
+		"48": "icons/icon48.png",
+		"128": "icons/icon128.png"
+	},
+	"permissions": [
+		"activeTab",
+		"downloads",
+		"scripting",
+		"storage",
+		"contextMenus",
+		"windows"
+	],
+	"content_scripts": [
+		{
+			"matches": [
+			"https://www.linkedin.com/jobs/view/*",
+			"https://www.indeed.com/viewjob*",
+			"https://ca.indeed.com/viewjob*"
+			],
+			"js": ["contentScript.js"],
+			"run_at": "document_end"
+		}
+	],
+	"background": {
+		"service_worker": "background.js"
+	},
+	"content_security_policy": {
+	  "extension_pages": "script-src 'self'; object-src 'self'"
+	}
 }
