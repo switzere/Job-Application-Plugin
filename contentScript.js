@@ -1,4 +1,5 @@
 // contentScript.js
+alert('Content script loaded!');
 
 function getLinkedInJobInfo() {
   const jobTitle = document.querySelector('h1.topcard__title')?.innerText || '';
@@ -28,33 +29,34 @@ function sendJobApplication(job) {
   chrome.runtime.sendMessage({ type: 'NEW_JOB_APPLICATION', job });
 }
 
-function setupLinkedInListener() {
-  const applyButton = document.querySelector('button.jobs-apply-button, button[data-control-name="jobdetails_topcard_inapply"]');
-  if (applyButton) {
-    applyButton.addEventListener('click', () => {
-      setTimeout(() => {
-        const job = getLinkedInJobInfo();
-        sendJobApplication(job);
-      }, 1000); // Wait for any async UI changes
-    });
+function observeAndAttach(selector, getJobInfo) {
+  function attach() {
+    const btn = document.querySelector(selector);
+    if (btn && !btn.dataset.jobRecorderAttached) {
+      btn.dataset.jobRecorderAttached = "true";
+      btn.addEventListener('click', () => {
+        setTimeout(() => {
+          const job = getJobInfo();
+            console.log(job)
+          sendJobApplication(job);
+        }, 1000);
+      });
+    }
   }
+  // Initial attach
+  attach();
+  // Observe for dynamic changes
+  const observer = new MutationObserver(attach);
+  observer.observe(document.body, { childList: true, subtree: true });
 }
 
-function setupIndeedListener() {
-  const applyButton = document.querySelector('button.ia-IndeedApplyButton, button[aria-label*="Apply"]');
-  if (applyButton) {
-    applyButton.addEventListener('click', () => {
-      setTimeout(() => {
-        const job = getIndeedJobInfo();
-        sendJobApplication(job);
-      }, 1000);
-    });
-  }
-}
-
+// LinkedIn
 if (window.location.hostname.includes('linkedin.com')) {
-  setupLinkedInListener();
+  // Only observe the true submit buttons in the modal
+  observeAndAttach('button[aria-label="Submit application"], button[data-live-test-easy-apply-submit-button]', getLinkedInJobInfo);
 }
+
+// Indeed
 if (window.location.hostname.includes('indeed.com')) {
-  setupIndeedListener();
+  observeAndAttach('button.ia-IndeedApplyButton, button[aria-label*="Apply"]', getIndeedJobInfo);
 }

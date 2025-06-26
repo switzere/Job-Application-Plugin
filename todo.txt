@@ -1,0 +1,1 @@
+linkedIn - on clicking easy apply, record job details. Then once submit is cliked use those job details to record them.
