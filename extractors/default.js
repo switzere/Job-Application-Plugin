@@ -10,3 +10,5 @@ export function extractGeneralDetails() {
     postingSource: 'Other'
   };
 }
+
+window.extractGeneralDetails = extractGeneralDetails;

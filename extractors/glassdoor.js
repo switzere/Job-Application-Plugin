@@ -7,3 +7,5 @@ export function extractGlassdoorDetails() {
     jobDescription: jobDescription
   };
 }
+
+window.extractGlassdoorDetails = extractGlassdoorDetails;

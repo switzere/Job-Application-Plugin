@@ -26,3 +26,5 @@ export function extractLeverDetails() {
     locationInfo: location
   };
 }
+
+window.extractLeverDetails = extractLeverDetails;

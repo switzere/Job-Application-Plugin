@@ -7,3 +7,5 @@ export function extractGreenhouseDetails() {
     jobDescription: jobDescription
   };
 }
+
+window.extractGreenhouseDetails = extractGreenhouseDetails;

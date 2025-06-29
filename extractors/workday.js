@@ -32,3 +32,5 @@ export function extractWorkdayDetails() {
         requisition: requisition
       };
   }
+
+  window.extractWorkdayDetails = extractWorkdayDetails;

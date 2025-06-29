@@ -28,3 +28,5 @@ export function extractSmartApplyIndeedDetails() {
       postingSource: 'Indeed'
     };
   }
+
+  window.extractSmartApplyIndeedDetails = extractSmartApplyIndeedDetails;

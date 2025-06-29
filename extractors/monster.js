@@ -24,3 +24,5 @@ export function extractMonsterDetails() {
     postingSource: 'Monster'
   };
 }
+
+window.extractMonsterDetails = extractMonsterDetails;

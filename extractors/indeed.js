@@ -38,3 +38,5 @@ export function extractIndeedDetails() {
         postingSource: 'Indeed'
       };
   }
+
+  window.extractIndeedDetails = extractIndeedDetails;

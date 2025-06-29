@@ -1,4 +1,4 @@
-export function extractLinkedInDetails() {
+function extractLinkedInDetails() {
     // TODO: Implement extraction logic for LinkedIn
     const jobTitleElement = document.querySelector('.job-details-jobs-unified-top-card__job-title');
     const jobTitle = jobTitleElement ? jobTitleElement.innerText : 'Job Title Not Found';
@@ -31,3 +31,5 @@ export function extractLinkedInDetails() {
         postDate: postDate
       };
   }
+
+  window.extractLinkedInDetails = extractLinkedInDetails;

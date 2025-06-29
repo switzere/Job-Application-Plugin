@@ -44,3 +44,5 @@ export function extractVectorDetails() {
     };
 
 }
+
+window.extractVectorDetails = extractVectorDetails;

@@ -24,7 +24,19 @@
 			"https://www.indeed.com/*",
 			"https://ca.indeed.com/*"
 			],
-			"js": ["contentScript.js"],
+			"js": [
+				"extractors/linkedIn.js",
+				"extractors/indeed.js",
+				"extractors/workday.js",
+				"extractors/monster.js",
+				"extractors/glassdoor.js",
+				"extractors/lever.js",
+				"extractors/greenhouse.js",
+				"extractors/vector.js",
+				"extractors/smartapply.indeed.js",
+				"extractors/default.js",
+				"contentScript.js"
+			],
 			"run_at": "document_end"
 		}
 	],
