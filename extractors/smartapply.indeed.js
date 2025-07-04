@@ -1,4 +1,4 @@
-export function extractSmartApplyIndeedDetails() {
+function extractSmartApplyIndeedDetails() {
     // Extract job title from the element with id "ia-JobInfoCard-header-title"
     const jobTitleElement = document.querySelector('#ia-JobInfoCard-header-title');
     const jobTitle = jobTitleElement ? jobTitleElement.innerText : 'Job Title Not Found';

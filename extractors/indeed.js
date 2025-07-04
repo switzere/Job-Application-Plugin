@@ -1,4 +1,4 @@
-export function extractIndeedDetails() {
+function extractIndeedDetails() {
     let jobTitleElement = document.querySelector('.jobsearch-JobInfoHeader-title-container');
     if (!jobTitleElement) {
         jobTitleElement = document.querySelector('[data-testid="jobDetailTitle"]');
@@ -37,6 +37,30 @@ export function extractIndeedDetails() {
         locationInfo: location,
         postingSource: 'Indeed'
       };
-  }
+}
 
-  window.extractIndeedDetails = extractIndeedDetails;
+function attachIndeedSubmit(){
+    function attach() {
+        const btn = document.querySelector('#applyButtonLinkContainer button, #applyButtonLinkContainer a');
+
+        if (btn && !btn.dataset.jobRecorderAttached) {
+            btn.dataset.jobRecorderAttached = "true";
+            btn.addEventListener('click', () => {
+                setTimeout(() => {
+                const job = getJobDetailsForCurrentSite();
+                if (job) sendJobApplication(job);
+                }, 1000);
+            });
+        }
+    }
+
+    attach();
+    const observer = new MutationObserver(attach);
+    observer.observe(document.body, { childList: true, subtree: true });
+
+}
+
+
+window.extractIndeedDetails = extractIndeedDetails;
+
+window.attachIndeedSubmit = attachIndeedSubmit;

@@ -22,10 +22,11 @@
 			"matches": [
 			"https://www.linkedin.com/jobs/*",
 			"https://www.indeed.com/*",
-			"https://ca.indeed.com/*"
+			"https://ca.indeed.com/*",
+			"https://smartapply.indeed.com/*"
 			],
 			"js": [
-				"extractors/linkedIn.js",
+				"extractors/linkedin.js",
 				"extractors/indeed.js",
 				"extractors/workday.js",
 				"extractors/monster.js",

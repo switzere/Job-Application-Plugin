@@ -1,4 +1,4 @@
-export function extractLeverDetails() {
+function extractLeverDetails() {
   // TODO: Implement extraction logic for Lever
   
   // Select the <h2> element within the <div class="posting-headline">

@@ -1,4 +1,4 @@
-export function extractWorkdayDetails() {
+function extractWorkdayDetails() {
     const jobTitleElement = document.querySelector('[data-automation-id="jobPostingHeader"]');
     const jobTitle = jobTitleElement ? jobTitleElement.innerText : 'Job Title Not Found';
 

@@ -1,4 +1,4 @@
-export function extractGreenhouseDetails() {
+function extractGreenhouseDetails() {
   // TODO: Implement extraction logic for Greenhouse
   return {
     jobTitle: jobTitle,

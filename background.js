@@ -33,11 +33,12 @@ chrome.action.onClicked.addListener((tab) => {
 });
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.type === 'NEW_JOB_APPLICATION' && message.job) {
+  if (message.type === 'newJobApp' && message.job) {
     chrome.storage.local.get(['jobDetails'], (result) => {
       const jobDetails = result.jobDetails || [];
       jobDetails.push(message.job);
       chrome.storage.local.set({ jobDetails });
+      console.log('Received newJobApp message:', message.job);
     });
   }
 });

@@ -1,4 +1,4 @@
-export function extractMonsterDetails() {
+function extractMonsterDetails() {
   const jobTitleElement = document.querySelector('[data-testid="jobTitle"]');
     const jobTitle = jobTitleElement ? jobTitleElement.innerText : 'Job Title Not Found';
 

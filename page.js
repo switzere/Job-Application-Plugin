@@ -1,5 +1,3 @@
-import { preprocessText, extractKeyTerms, printHi } from './nlp.js';
-
 document.addEventListener('DOMContentLoaded', () => {
   const jobDetailsTable = document.getElementById('job-details');
   const deletedJobDetailsTable = document.getElementById('deleted-job-details');
@@ -19,8 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
   let sourceChartInstance;
 
   let currentJobIndex = null;
-
-  printHi();
 
   // Load job details from local storage and display them
   chrome.storage.local.get(['jobDetails', 'deletedJobDetails'], (result) => {

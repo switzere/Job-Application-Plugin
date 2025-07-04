@@ -1,4 +1,4 @@
-export function extractGlassdoorDetails() {
+function extractGlassdoorDetails() {
   // TODO: Implement extraction logic for Glassdoor
   return {
     jobTitle: jobTitle,

@@ -1,4 +1,4 @@
-export function extractGeneralDetails() {
+function extractGeneralDetails() {
   const websiteName = document.title;
   const mainText = document.body.innerText;
 

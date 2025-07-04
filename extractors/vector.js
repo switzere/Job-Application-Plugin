@@ -1,4 +1,4 @@
-export function extractVectorDetails() {
+function extractVectorDetails() {
     const jobTitleElementAndCompany = document.querySelector('.jobDetail-headerIntro');
 
     // Extract the job title from the <h1> element
