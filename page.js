@@ -459,6 +459,7 @@ function handleConfirm() {
 
   // Create a line chart of job applications by date
   function createDateChart(details) {
+    details = details.slice().sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
     if (dateChartInstance) {
       dateChartInstance.destroy();
     }

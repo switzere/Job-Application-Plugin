@@ -35,7 +35,10 @@ function extractIndeedDetails() {
         jobDescription: jobDescription,
         jobDescRaw: jobDescRaw,
         locationInfo: location,
-        postingSource: 'Indeed'
+        postingSource: 'Indeed',
+        timestamp: new Date().toISOString(),
+        notes: '',  // Add a blank notes field
+        stage: 'Applied'  // Add a stage field with default value "Applied"
       };
 }
 
@@ -47,7 +50,7 @@ function attachIndeedSubmit(){
             btn.dataset.jobRecorderAttached = "true";
             btn.addEventListener('click', () => {
                 setTimeout(() => {
-                const job = getJobDetailsForCurrentSite();
+                const job = extractIndeedDetails(); // Direct call
                 if (job) sendJobApplication(job);
                 }, 1000);
             });

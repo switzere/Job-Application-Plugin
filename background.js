@@ -34,11 +34,18 @@ chrome.action.onClicked.addListener((tab) => {
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'newJobApp' && message.job) {
+
+    const details = message.job;
+
+    details.timestamp = new Date().toISOString();
+    details.notes = '';  // Add a blank notes field
+    details.stage = 'Applied';  // Add a stage field with default value "Applied"
+
     chrome.storage.local.get(['jobDetails'], (result) => {
       const jobDetails = result.jobDetails || [];
-      jobDetails.push(message.job);
+      jobDetails.unshift(details);
       chrome.storage.local.set({ jobDetails });
-      console.log('Received newJobApp message:', message.job);
+      console.log('Received newJobApp message:', details);
     });
   }
 });
