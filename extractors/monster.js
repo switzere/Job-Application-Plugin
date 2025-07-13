@@ -25,4 +25,28 @@ function extractMonsterDetails() {
   };
 }
 
+function attachMonsterSubmit() {
+  function attach() {
+    const btns = document.querySelectorAll('[data-testid="quick-apply-button"], [data-testid="apply-button"]');
+
+    for (const btn of btns) {
+      if (btn && !btn.dataset.jobRecorderAttached) {
+        btn.dataset.jobRecorderAttached = "true";
+        btn.addEventListener('click', () => {
+          setTimeout(() => {
+            const job = extractMonsterDetails(); // Direct call
+            if (job) sendJobApplication(job);
+          }, 1000);
+        });
+      }
+    }
+  }
+
+  attach();
+  const observer = new MutationObserver(attach);
+  observer.observe(document.body, { childList: true, subtree: true });
+}
+
 window.extractMonsterDetails = extractMonsterDetails;
+
+window.attachMonsterSubmit = attachMonsterSubmit;
