@@ -44,7 +44,12 @@ function extractIndeedDetails() {
 
 function attachIndeedSubmit(){
     function attach() {
-        const btn = document.querySelector('#applyButtonLinkContainer button, #applyButtonLinkContainer a');
+        const btn = document.querySelector(
+            '.indeed-apply-status-not-applied button, ' +
+            '.indeed-apply-status-not-applied a, ' +
+            '#applyButtonLinkContainer button, ' +
+            '#applyButtonLinkContainer a'
+        );
 
         if (btn && !btn.dataset.jobRecorderAttached) {
             btn.dataset.jobRecorderAttached = "true";

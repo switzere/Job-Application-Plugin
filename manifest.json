@@ -28,7 +28,7 @@
 				"https://www.glassdoor.com/*",
 				"https://jobs.lever.co/*",
 				"https://boards.greenhouse.io/*",
-				"https://vector.com/*",
+				"https://talenthub.vectorinstitute.ai/*",
 				"https://smartapply.indeed.com/*"
 			],
 			"js": [

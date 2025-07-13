@@ -45,4 +45,28 @@ function extractVectorDetails() {
 
 }
 
+function attachVectorSubmit() {
+    function attach() {
+        const btns = document.querySelectorAll('#apply_button_job-details-sidebar, #apply_button_job-details-bottom');
+
+        for (const btn of btns) {
+            if (btn && !btn.dataset.jobRecorderAttached) {
+                btn.dataset.jobRecorderAttached = "true";
+                btn.addEventListener('click', () => {
+                    setTimeout(() => {
+                        const job = extractVectorDetails();
+                        if (job) sendJobApplication(job);
+                    }, 1000);
+                });
+            }
+        }
+    }
+
+    attach();
+    const observer = new MutationObserver(attach);
+    observer.observe(document.body, { childList: true, subtree: true });
+}
+
 window.extractVectorDetails = extractVectorDetails;
+
+window.attachVectorSubmit = attachVectorSubmit;

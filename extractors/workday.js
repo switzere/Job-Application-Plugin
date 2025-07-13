@@ -33,4 +33,26 @@ function extractWorkdayDetails() {
       };
   }
 
-  window.extractWorkdayDetails = extractWorkdayDetails;
+function attachWorkdaySubmit() {
+    function attach() {
+        const btn = document.querySelector('button[aria-label="Submit Application"], button[aria-label="Apply Now"]');
+
+        if (btn && !btn.dataset.jobRecorderAttached) {
+            btn.dataset.jobRecorderAttached = "true";
+            btn.addEventListener('click', () => {
+                setTimeout(() => {
+                    const job = extractWorkdayDetails(); // Direct call
+                    if (job) sendJobApplication(job);
+                }, 1000);
+            });
+        }
+    }
+
+    attach();
+    const observer = new MutationObserver(attach);
+    observer.observe(document.body, { childList: true, subtree: true });
+}
+
+window.extractWorkdayDetails = extractWorkdayDetails;
+
+window.attachWorkdaySubmit = attachWorkdaySubmit;
