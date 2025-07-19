@@ -118,3 +118,27 @@ if (window.location.hostname.includes('linkedin.com')) {
 } else {
   // For other sites do not trigger on any buttons
 }
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.type === 'openSidebar') {
+    if (!document.getElementById('jobAppSidebar')) {
+      const sidebar = document.createElement('div');
+      sidebar.id = 'jobAppSidebar';
+      sidebar.style.position = 'fixed';
+      sidebar.style.top = '0';
+      sidebar.style.right = '0';
+      sidebar.style.width = '350px';
+      sidebar.style.height = '100%';
+      sidebar.style.background = '#fff';
+      sidebar.style.borderLeft = '2px solid #ccc';
+      sidebar.style.zIndex = '999999';
+      sidebar.style.boxShadow = '-2px 0 8px rgba(0,0,0,0.15)';
+      sidebar.innerHTML = '<h2 style="margin:16px;">Job Application Sidebar</h2><div style="padding:16px;">Sidebar content here...</div><button id="closeSidebarBtn" style="position:absolute;top:8px;right:8px;">Close</button>';
+      document.body.appendChild(sidebar);
+
+      document.getElementById('closeSidebarBtn').onclick = () => {
+        sidebar.remove();
+      };
+    }
+  }
+});

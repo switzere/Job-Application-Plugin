@@ -3,7 +3,10 @@
 	"name": "Job Application Recorder",
 	"version": "1.3",
 	"description": "Record and visualize job application details.",
-	"action": {},
+	"action": {
+		"default_popup": "popup.html",
+		"default_icon": "icons/icon48.png"
+	},
 	"icons": {
 		"16": "icons/icon16.png",
 		"48": "icons/icon48.png",
@@ -15,7 +18,8 @@
 		"scripting",
 		"storage",
 		"contextMenus",
-		"windows"
+		"windows",
+		"sidePanel"
 	],
 	"content_scripts": [
 		{
@@ -49,6 +53,9 @@
 	],
 	"background": {
 		"service_worker": "background.js"
+	},
+	"side_panel": {
+		"default_path": "sidepanel.html"
 	},
 	"content_security_policy": {
 	  "extension_pages": "script-src 'self'; object-src 'self'"

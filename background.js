@@ -12,26 +12,6 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
   }
 });
 
-chrome.action.onClicked.addListener((tab) => {
-  chrome.windows.create({
-    url: chrome.runtime.getURL('popup.html'),
-    type: 'popup',
-    width: 400,
-    height: 600
-  }, (newWindow) => {
-    chrome.runtime.onMessage.addListener(function listener(message, sender, sendResponse) {
-      if (message.action === 'popupReady') {
-        chrome.runtime.onMessage.removeListener(listener);
-        chrome.runtime.sendMessage({
-          action: 'openPopup',
-          tabId: tab.id,
-          tabUrl: tab.url
-        });
-      }
-    });
-  });
-});
-
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'newJobApp' && message.job) {
 
@@ -46,6 +26,15 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       jobDetails.unshift(details);
       chrome.storage.local.set({ jobDetails });
       console.log('Received newJobApp message:', details);
+    });
+  }
+});
+
+chrome.runtime.onMessage.addListener((message, sender) => {
+  if (message.action === 'open_side_panel') {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      // This callback is still considered a user gesture
+      chrome.sidePanel.open({ windowId: tabs[0].windowId });
     });
   }
 });
