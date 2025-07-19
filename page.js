@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const sourceChartCanvas = document.getElementById('sourceChart').getContext('2d');
   const totalJobsCount = document.getElementById('totalJobsCount');
   const jobsThisWeekCount = document.getElementById('jobsThisWeekCount');
+  const jobsTodayCount = document.getElementById('jobsTodayCount');
 
   let jobChartInstance;
   let dateChartInstance;
@@ -66,12 +67,13 @@ document.addEventListener('DOMContentLoaded', () => {
       // Create table rows
       details.forEach((detail, index) => {
         const row = document.createElement('tr');
+        const date = new Date(detail.timestamp);
         row.innerHTML = `
           <td class="baseCol" data-field="jobTitle">${detail.jobTitle || 'N/A'}</td>
           <td class="baseCol" data-field="companyInfo">${detail.companyInfo || 'N/A'}</td>
           <td class="baseCol short-url"><a href="${detail.url}" target="_blank" title="${detail.url}">${truncateText(detail.url, 30) || 'N/A'}</a></td>
           <td class="baseCol" data-field="postingSource">${detail.postingSource || 'N/A'}</td>
-          <td class="baseCol">${detail.timestamp || 'N/A'}</td>
+          <td class="baseCol">${date || 'N/A'}</td>
           <td>
             <select class="stage-select" data-index="${index}">
               <option value="Applied" ${detail.stage === 'Applied' ? 'selected' : ''}>Applied</option>
@@ -572,5 +574,11 @@ function handleConfirm() {
     oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
     const jobsThisWeek = dates.filter(date => date >= oneWeekAgo).length;
     jobsThisWeekCount.textContent = `This Week: ${jobsThisWeek}`;
+
+    // Update jobs today count
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const jobsToday = dates.filter(date => date >= today).length;
+    jobsTodayCount.textContent = `Today: ${jobsToday}`;
   }
 });

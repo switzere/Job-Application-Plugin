@@ -34,16 +34,22 @@ function extractLinkedInDetails() {
 
 function attachLinkedInSubmit(){
     function attach() {
-        const btn = document.querySelector('button[aria-label="Submit application"]');
+        const btns = document.querySelectorAll(
+            'button[role="link"][aria-label^="Apply to"][data-live-test-job-apply-button], ' +
+            'button[aria-label="Submit application"]'
+        );
 
-        if (btn && !btn.dataset.jobRecorderAttached) {
-            btn.dataset.jobRecorderAttached = "true";
-            btn.addEventListener('click', () => {
-                setTimeout(() => {
-                const job = getJobDetailsForCurrentSite();
-                if (job) sendJobApplication(job);
-                }, 1000);
-            });
+
+        for (const btn of btns) {
+            if (btn && !btn.dataset.jobRecorderAttached) {
+                btn.dataset.jobRecorderAttached = "true";
+                btn.addEventListener('click', () => {
+                    setTimeout(() => {
+                    const job = extractLinkedInDetails();
+                    if (job) sendJobApplication(job);
+                    }, 1000);
+                });
+            }
         }
     }
 

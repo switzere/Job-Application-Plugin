@@ -87,7 +87,8 @@ body {
 
 table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   table-layout: fixed;
 }
 
@@ -98,6 +99,9 @@ th, td {
 }
 
 th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
   background-color: #f2f2f2;
   font-weight: bold;
 }
@@ -138,7 +142,7 @@ canvas {
   height: auto !important;
 }
 
-#totalJobsCount, #jobsThisWeekCount {
+#totalJobsCount, #jobsThisWeekCount, #jobsTodayCount {
   font-size: 4em; /* Increase the font size */
   font-weight: bold; /* Make the text bold */
   margin-top: 10px; /* Add some margin for spacing */
