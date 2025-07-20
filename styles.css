@@ -36,6 +36,7 @@ body {
 
 .button-container {
   display: flex;
+  justify-content: center;
   gap: 10px;
 }
 
@@ -56,24 +57,6 @@ body {
 
 .icon-button:hover {
   background-color: #a3a7e0; /* Darker background color on hover */
-}
-
-.icon-button:hover::after {
-  content: attr(title);
-  position: absolute;
-  bottom: -30px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #333;
-  color: white;
-  padding: 5px 10px;
-  border-radius: 5px;
-  white-space: nowrap;
-  z-index: 10;
-  max-width: 200px; /* Ensure the tooltip doesn't exceed a certain width */
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: normal; /* Allow the tooltip to wrap text */
 }
 
 .table-container {
@@ -313,6 +296,15 @@ canvas {
   gap: 10px;
 }
 
+.popup .button-container {
+  padding: 10px;
+  gap: 10px;
+}
+
+.popup {
+  border: 1px solid #000000; /* Border color */
+}
+
 .details-container {
   display: flex;
   justify-content: space-between;
@@ -380,6 +372,14 @@ textarea {
   height: 24px;
 }
 
+.popup .icon-button {
+  border: 1px solid #000000; /* Border color */
+  padding: 10px;
+  object-fit: contain;
+  display: block;
+  margin: auto;
+}
+
 
 .sidepanel-container {
   padding: 24px;
@@ -442,4 +442,18 @@ textarea {
 
 .sidepanel-buttons button:hover {
   background-color: #211c68;
+}
+
+#sidebar {
+  display: none;
+  position: fixed;
+  top: 0; right: 0;
+  width: 300px; height: 100%;
+  background: #f0f4fc;
+  box-shadow: -2px 0 8px rgba(0,0,0,0.2);
+  z-index: 9999;
+  padding: 20px;
+}
+#sidebar.active {
+  display: block;
 }

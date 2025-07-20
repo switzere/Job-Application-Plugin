@@ -3,31 +3,23 @@
 <head>
   <title>Job Application Popup</title>
   <link rel="stylesheet" type="text/css" href="styles.css">
-  <style>
-    #sidebar {
-      display: none;
-      position: fixed;
-      top: 0; right: 0;
-      width: 300px; height: 100%;
-      background: #f0f4fc;
-      box-shadow: -2px 0 8px rgba(0,0,0,0.2);
-      z-index: 9999;
-      padding: 20px;
-    }
-    #sidebar.active {
-      display: block;
-    }
-  </style>
 </head>
 <body>
+  <div class="popup">
   <div class="header-container">
-    <h2>Job Application Plugin</h2>
-  </div>
-  <div style="padding: 20px;">
-    <p id="jobsTodayCount">Jobs applied today: ...</p>
-    <button id="settingsButton" class="icon-button">Settings</button>
-    <button id="chartsButton" class="icon-button">Charts/Graphs</button>
-    <button id="openSidePanel" class="icon-button">Custom Apply (Sidebar)</button>
+      <h2>Job Application Plugin</h2>
+    </div>
+    <div class="button-container">
+      <button id="openSidePanel" class="icon-button" title="Custom Record">
+        <img src="icons/form.png" alt="Custom Record" />
+      </button>
+      <button id="chartsButton" class="icon-button" title="Dashboard">
+        <img src="icons/graph.png" alt="Dashboard" />
+      </button>
+      <button id="settingsButton" class="icon-button" title="Settings">
+        <img src="icons/gear.png" alt="Settings" />
+      </button>
+    </div>
   </div>
   <script src="popup.js"></script>
 </body>

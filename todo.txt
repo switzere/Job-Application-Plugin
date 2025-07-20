@@ -1,1 +1,15 @@
-linkedIn - on clicking easy apply, record job details. Then once submit is cliked use those job details to record them.
+make prettier
+    - popup
+    - sidebar
+    - timestamp
+
+fix: Uncaught Error: Extension context invalidated. contentScript.js:94
+
+settings page
+    - choose which extractors to turn on
+
+get a share url instead of the current url
+
+
+I would like the copy-paste feature of easy things,
+could have different sidebars depending on button hit

@@ -1,12 +1,16 @@
 document.addEventListener('DOMContentLoaded', () => {
   // Show jobs applied today
-  const jobsTodayCount = document.getElementById('jobsTodayCount');
-  chrome.storage.local.get(['jobDetails'], (result) => {
-    const details = result.jobDetails || [];
-    const today = new Date().toISOString().slice(0, 10);
-    const count = details.filter(d => (d.timestamp || '').slice(0, 10) === today).length;
-    jobsTodayCount.textContent = `Jobs applied today: ${count}`;
-  });
+//   const jobsTodayCount = document.getElementById('jobsTodayCount');
+//   chrome.storage.local.get(['jobDetails'], (result) => {
+//     const details = result['jobDetails'] || [];
+//     const dates = details.map(detail => new Date(detail.timestamp));
+
+//     const today = new Date();
+//     today.setHours(0, 0, 0, 0);
+//     const jobsToday = dates.filter(date => date >= today).length;
+//     jobsTodayCount.textContent = `Today: ${jobsToday}`;
+
+//   });
 
   // Settings page link
   document.getElementById('settingsButton').addEventListener('click', () => {
