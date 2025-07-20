@@ -1,11 +1,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Job Application Side Panel</title>
+  <title>Job Application Recorder</title>
   <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-  <h2>Custom Apply Sidebar</h2>
-  <p>Sidebar content goes here.</p>
+  <div class="sidepanel-container">
+    <div class="sidepanel-title">Custom Apply Sidebar</div>
+    <div class="sidepanel-section">
+      <label for="jobTitle">Job Title</label>
+      <input id="jobTitle" type="text" placeholder="Enter job title...">
+      <label for="companyInfo">Company</label>
+      <input id="companyInfo" type="text" placeholder="Enter company name...">
+      <label for="websiteURL">Website URL</label>
+      <input id="websiteURL" type="text" placeholder="Enter job URL...">
+      <label for="locationInfo">Location</label>
+      <input id="locationInfo" type="text" placeholder="Enter location...">
+      <label for="postingSource">Posting Source</label>
+      <input id="postingSource" type="text" placeholder="Enter source...">
+      <label for="jobDescription">Job Description</label>
+        <div id="jobDescription" contenteditable="true"></div>
+    </div>
+    <div class="sidepanel-buttons">
+      <button id="confirmButton" class="confirmButton">Confirm</button>
+    </div>
+  </div>
+  <script src="sidepanel.js"></script>
 </body>
 </html>

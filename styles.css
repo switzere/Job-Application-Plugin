@@ -379,3 +379,67 @@ textarea {
   width: 24px;
   height: 24px;
 }
+
+
+.sidepanel-container {
+  padding: 24px;
+  max-width: 500px;
+  margin: auto;
+}
+
+.sidepanel-title {
+  font-size: 2em;
+  font-weight: bold;
+  color: #232a83;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.sidepanel-section {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.sidepanel-section label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 6px;
+  color: #232a83;
+}
+
+.sidepanel-section textarea,
+.sidepanel-section input {
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 8px;
+  margin-bottom: 12px;
+  font-size: 1em;
+  box-sizing: border-box;
+  background: #f9f9f9;
+}
+
+.sidepanel-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.sidepanel-buttons button {
+  background-color: #232a83;
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 5px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.sidepanel-buttons button:hover {
+  background-color: #211c68;
+}

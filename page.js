@@ -413,12 +413,13 @@ function handleConfirm() {
   });
 
   // Utility function to truncate text
-  function truncateText(text, maxLength) {
-    if (text.length > maxLength) {
-      return text.substring(0, maxLength) + '...';
-    }
-    return text;
+function truncateText(text, maxLength) {
+  if (!text) return '';
+  if (text.length > maxLength) {
+    return text.slice(0, maxLength) + '...';
   }
+  return text;
+}
 
   // Create a bar chart using Chart.js
   function createJobChart(details) {

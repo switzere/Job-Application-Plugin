@@ -1,5 +1,34 @@
-// contentScript.js
+function sendJobApplication(job) {
+  //print job details
+    showJobPopup(job);
+  console.log('Job Application Details:', job);
+  chrome.runtime.sendMessage({ type: 'newJobApp', job });
 
+}
+
+document.getElementById('confirmButton').addEventListener('click', () => {
+  const jobDetails = {
+    jobTitle: document.getElementById('jobTitle').value,
+    companyInfo: document.getElementById('companyInfo').value,
+    url: document.getElementById('websiteURL').value,
+    jobDescription: document.getElementById('jobDescription').innerText,
+    locationInfo: document.getElementById('locationInfo').value,
+    postingSource: document.getElementById('postingSource').value,
+  };
+
+  sendJobApplication(jobDetails);
+
+
+  setTimeout(() => {
+    // Close the side panel
+    if (window.close) window.close();
+  }, 800);
+});
+
+
+
+
+//should really figure out how to use this code that is copied from contentScript.js
 function showJobPopup(job) {
   // Remove any existing popup
   const oldPopup = document.getElementById('job-app-popup');
@@ -86,35 +115,3 @@ style.textContent = `
 }
 `;
 document.head.appendChild(style);
-
-function sendJobApplication(job) {
-  //print job details
-  showJobPopup(job);
-  console.log('Job Application Details:', job);
-  chrome.runtime.sendMessage({ type: 'newJobApp', job });
-
-}
-
-// Attach extractors to specific sites
-if (window.location.hostname.includes('linkedin.com')) {
-  window.attachLinkedInSubmit();
-} else if (window.location.hostname.includes('smartapply.indeed')) {
-  //window.attachSmartApplyIndeedSubmit();
-  //done from indeed.com, could be done through SmartApply but not currently
-} else if (window.location.hostname.includes('indeed.com')) {
-  window.attachIndeedSubmit();
-} else if (window.location.hostname.includes('workday')) {
-  window.attachWorkdaySubmit();
-} else if (window.location.hostname.includes('monster')) {
-  window.attachMonsterSubmit();
-} else if (window.location.hostname.includes('glassdoor')) {
-  window.attachGlassdoorSubmit();
-} else if (window.location.hostname.includes('lever')) {
-  window.attachLeverSubmit();
-} else if (window.location.hostname.includes('greenhouse')) {
-  window.attachGreenhouseSubmit();
-} else if (window.location.hostname.includes('vector')) {
-  window.attachVectorSubmit();
-} else {
-  // For other sites do not trigger on any buttons
-}
