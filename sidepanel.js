@@ -6,12 +6,24 @@ function sendJobApplication(job) {
 
 }
 
+// Wait for DOM to be ready
+document.addEventListener('DOMContentLoaded', () => {
+  // Query the active tab in the current window
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    if (tabs && tabs[0] && tabs[0].url) {
+      document.getElementById('websiteURL').value = tabs[0].url;
+    }
+  });
+});
+
+
 document.getElementById('confirmButton').addEventListener('click', () => {
   const jobDetails = {
     jobTitle: document.getElementById('jobTitle').value,
     companyInfo: document.getElementById('companyInfo').value,
     url: document.getElementById('websiteURL').value,
-    jobDescription: document.getElementById('jobDescription').innerText,
+    jobDescription: document.getElementById('jobDescription').innerHTML,
+    jobDescrRaw: document.getElementById('jobDescription').innerText,
     locationInfo: document.getElementById('locationInfo').value,
     postingSource: document.getElementById('postingSource').value,
   };
