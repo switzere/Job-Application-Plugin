@@ -1,10 +1,8 @@
 function extractLeverDetails() {
-  // TODO: Implement extraction logic for Lever
-  
-  // Select the <h2> element within the <div class="posting-headline">
-  const jobTitleElement = document.querySelector('.posting-headline h2');
-  // Get the text content of the <h2> element
-  const jobTitle = jobTitleElement.textContent.trim();
+
+  // Select the <h2> element within the <div class="posting-header">
+  const jobTitleElement = document.querySelector('.posting-header h2');
+  const jobTitle = jobTitleElement ? jobTitleElement.textContent.trim() : 'Job Title Not Found';
 
   const companyInfoElement = document.title
   const companyInfo = companyInfoElement ? companyInfoElement : 'Company Info Not Found';
@@ -29,19 +27,18 @@ function extractLeverDetails() {
 
 function attachLeverSubmit() {
   function attach() {
-    const btns = document.querySelectorAll('button[data-automation="apply-button"], button[data-automation="apply-now-button"]');
+    const btn = document.getElementById('btn-submit');
 
-    for (const btn of btns) {
-      if (btn && !btn.dataset.jobRecorderAttached) {
-        btn.dataset.jobRecorderAttached = "true";
-        btn.addEventListener('click', () => {
-          setTimeout(() => {
-            const job = extractLeverDetails(); // Direct call
-            if (job) sendJobApplication(job);
-          }, 1000);
-        });
-      }
+    if (btn && !btn.dataset.jobRecorderAttached) {
+      btn.dataset.jobRecorderAttached = "true";
+      btn.addEventListener('click', () => {
+        setTimeout(() => {
+          const job = extractLeverDetails(); // Direct call
+          if (job) sendJobApplication(job);
+        }, 1000);
+      });
     }
+    
   }
   attach();
   const observer = new MutationObserver(attach);
