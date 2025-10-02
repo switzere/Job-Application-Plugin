@@ -4,8 +4,8 @@ function extractLeverDetails() {
   const jobTitleElement = document.querySelector('.posting-header h2');
   const jobTitle = jobTitleElement ? jobTitleElement.textContent.trim() : 'Job Title Not Found';
 
-  const companyInfoElement = document.title
-  const companyInfo = companyInfoElement ? companyInfoElement : 'Company Info Not Found';
+  const urlParts = window.location.pathname.split('/');
+  const companyInfo = urlParts.length > 1 ? urlParts[1] : 'Company Not Found';
 
   const jobDescriptionElement = document.querySelector('[data-qa="job-description"]');
   const jobDescription = jobDescriptionElement ? jobDescriptionElement.innerHTML : 'Job Description Not Found';

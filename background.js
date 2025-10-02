@@ -14,7 +14,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'newJobApp' && message.job) {
-
+    
     const details = message.job;
 
     details.timestamp = new Date().toISOString();
@@ -23,6 +23,20 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
     chrome.storage.local.get(['jobDetails'], (result) => {
       const jobDetails = result.jobDetails || [];
+      // check if new job has the same job title and date as any of the other jobs
+      
+      const isDuplicate = jobDetails.some(job => job.jobTitle === details.jobTitle
+        && job.timestamp.slice(0,10) === details.timestamp.slice(0,10)
+        && job.companyInfo === details.companyInfo);
+
+      console.log('Duplicate check:', isDuplicate);
+      console.log(details.jobTitle, details.timestamp.slice(0,10), details.companyInfo);
+
+      if (isDuplicate) {
+        console.log('Duplicate job application found:', details);
+        return;
+      }
+
       jobDetails.unshift(details);
       chrome.storage.local.set({ jobDetails });
       console.log('Received newJobApp message:', details);

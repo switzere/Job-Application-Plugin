@@ -1,6 +1,6 @@
 function extractLinkedInDetails() {
     // TODO: Implement extraction logic for LinkedIn
-    const jobTitleElement = document.querySelector('.job-details-jobs-unified-top-card__job-title');
+    const jobTitleElement = document.querySelector('.job-details-jobs-unified-top-card__job-title h1 a');
     const jobTitle = jobTitleElement ? jobTitleElement.innerText : 'Job Title Not Found';
     
     // Extract company information from the second span element within the div with class "ia-JobHeader-information"
