@@ -65,6 +65,15 @@ function attachVectorSubmit() {
     attach();
     const observer = new MutationObserver(attach);
     observer.observe(document.body, { childList: true, subtree: true });
+
+            // Observe URL changes (SPA navigation)
+    const urlObserver = new MutationObserver(() => {
+        if (location.href !== lastUrl) {
+            lastUrl = location.href;
+            attach(); // Re-attach listeners for new job post
+        }
+    });
+    urlObserver.observe(document.body, { childList: true, subtree: true });
 }
 
 window.extractVectorDetails = extractVectorDetails;
