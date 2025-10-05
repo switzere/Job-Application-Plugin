@@ -26,6 +26,8 @@ function extractLeverDetails() {
 }
 
 function attachLeverSubmit() {
+  let lastUrl = location.href;
+
   function attach() {
     const btn = document.getElementById('btn-submit');
 

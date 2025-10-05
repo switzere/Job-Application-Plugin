@@ -26,6 +26,8 @@ function extractMonsterDetails() {
 }
 
 function attachMonsterSubmit() {
+  let lastUrl = location.href;
+
   function attach() {
     const btns = document.querySelectorAll('[data-testid="quick-apply-button"], [data-testid="apply-button"]');
 

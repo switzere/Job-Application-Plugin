@@ -30,6 +30,8 @@ function extractSmartApplyIndeedDetails() {
 }
 
 function attachSmartApplyIndeedSubmit() {
+    let lastUrl = location.href;
+
     let reviewObserver = null;
 
     function attach() {

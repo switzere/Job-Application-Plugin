@@ -43,6 +43,8 @@ function extractIndeedDetails() {
 }
 
 function attachIndeedSubmit(){
+    let lastUrl = location.href;
+
     function attach() {
         const btn = document.querySelector(
             '.indeed-apply-status-not-applied button, ' +

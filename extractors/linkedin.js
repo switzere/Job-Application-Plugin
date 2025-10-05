@@ -33,6 +33,8 @@ function extractLinkedInDetails() {
 }
 
 function attachLinkedInSubmit(){
+    let lastUrl = location.href;
+
     function attach() {
         const btns = document.querySelectorAll(
             'button[role="link"][aria-label^="Apply to"][data-live-test-job-apply-button], ' +

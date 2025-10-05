@@ -46,6 +46,8 @@ function extractVectorDetails() {
 }
 
 function attachVectorSubmit() {
+    let lastUrl = location.href;
+
     function attach() {
         const btns = document.querySelectorAll('#apply_button_job-details-sidebar, #apply_button_job-details-bottom');
 
