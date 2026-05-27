@@ -65,7 +65,11 @@ function attachIndeedSubmit(){
     }
 
     attach();
-    const observer = new MutationObserver(attach);
+    const observer = new MutationObserver(() => {
+        setTimeout(() => {
+            attach(); 
+        }, 200);
+    });
     observer.observe(document.body, { childList: true, subtree: true });
 
             // Observe URL changes (SPA navigation)

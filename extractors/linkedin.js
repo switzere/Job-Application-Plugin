@@ -16,7 +16,7 @@ function extractLinkedInDetails() {
     const extraDescriptionElement = document.querySelector('.job-details-jobs-unified-top-card__primary-description-container');
     // split the location info to get the location "Toronto, ON · 2 days ago · Over 100 people clicked apply"
     // split on first ·
-    const extraDescription = extraDescriptionElement.innerText.split(" · ");
+    const extraDescription = extraDescriptionElement ? extraDescriptionElement.innerText.split(" · ") : ['Location Info Not Found', 'Post Date Not Found'];
     const locationInfo = extraDescription[0] ? extraDescription[0] : 'Location Info Not Found';
     const postDate = extraDescription[1] ? extraDescription[1] : 'Post Date Not Found';
 
@@ -40,7 +40,8 @@ function attachLinkedInSubmit(){
             'button[role="link"][aria-label^="Apply to"][data-live-test-job-apply-button], ' +
             'button[aria-label="Submit application"]'
         );
-
+        //https://www.linkedin.com/jobs/view/4335137444/?trk=eml-email_job_alert_digest_01-primary_job_list-0-jobcard_body_14597860204&refId=MgQAI%2F0FGo20ppO3ypPCTw%3D%3D&trackingId=GZHv2StEwHQ00jaRbTs1oA%3D%3D
+        //job links like this seem to be all dynamic so it can't find anything unless I webscrape based on words not html
 
         for (const btn of btns) {
             if (btn && !btn.dataset.jobRecorderAttached) {
@@ -56,7 +57,11 @@ function attachLinkedInSubmit(){
     }
 
     attach();
-    const observer = new MutationObserver(attach);
+    const observer = new MutationObserver(() => {
+        setTimeout(() => {
+            attach(); 
+        }, 200);
+    });
     observer.observe(document.body, { childList: true, subtree: true });
 
         // Observe URL changes (SPA navigation)
