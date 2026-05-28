@@ -95,6 +95,7 @@ function sendJobApplication(job) {
 
 }
 
+
 // Attach extractors to specific sites
 if (window.location.hostname.includes('linkedin.com')) {
   window.attachLinkedInSubmit();
@@ -103,7 +104,7 @@ if (window.location.hostname.includes('linkedin.com')) {
   //done from indeed.com, could be done through SmartApply but not currently
 } else if (window.location.hostname.includes('indeed.com')) {
   window.attachIndeedSubmit();
-} else if (window.location.hostname.includes('workday')) {
+} else if (window.location.hostname.includes('myworkdayjobs.com')) {
   window.attachWorkdaySubmit();
 } else if (window.location.hostname.includes('monster')) {
   window.attachMonsterSubmit();
