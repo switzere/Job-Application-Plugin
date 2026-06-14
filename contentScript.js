@@ -96,26 +96,30 @@ function sendJobApplication(job) {
 }
 
 
-// Attach extractors to specific sites
-if (window.location.hostname.includes('linkedin.com')) {
-  window.attachLinkedInSubmit();
-} else if (window.location.hostname.includes('smartapply.indeed')) {
-  //window.attachSmartApplyIndeedSubmit();
-  //done from indeed.com, could be done through SmartApply but not currently
-} else if (window.location.hostname.includes('indeed.com')) {
-  window.attachIndeedSubmit();
-} else if (window.location.hostname.includes('myworkdayjobs.com')) {
-  window.attachWorkdaySubmit();
-} else if (window.location.hostname.includes('monster')) {
-  window.attachMonsterSubmit();
-} else if (window.location.hostname.includes('glassdoor')) {
-  window.attachGlassdoorSubmit();
-} else if (window.location.hostname.includes('lever')) {
-  window.attachLeverSubmit();
-} else if (window.location.hostname.includes('greenhouse')) {
-  window.attachGreenhouseSubmit();
-} else if (window.location.hostname.includes('vector')) {
-  window.attachVectorSubmit();
-} else {
-  // For other sites do not trigger on any buttons
-}
+// Attach extractors to specific sites (respects siteToggles from settings)
+chrome.storage.local.get(['siteToggles'], ({ siteToggles = {} }) => {
+  const on = site => siteToggles[site] !== false; // default enabled
+  const host = window.location.hostname;
+
+  if (host.includes('linkedin.com') && on('linkedin')) {
+    window.attachLinkedInSubmit();
+  } else if (host.includes('smartapply.indeed')) {
+    //window.attachSmartApplyIndeedSubmit();
+    //done from indeed.com, could be done through SmartApply but not currently
+  } else if (host.includes('indeed.com') && on('indeed')) {
+    window.attachIndeedSubmit();
+  } else if (host.includes('myworkdayjobs.com') && on('workday')) {
+    window.attachWorkdaySubmit();
+  } else if (host.includes('monster') && on('monster')) {
+    window.attachMonsterSubmit();
+  } else if (host.includes('glassdoor') && on('glassdoor')) {
+    window.attachGlassdoorSubmit();
+  } else if (host.includes('lever') && on('lever')) {
+    window.attachLeverSubmit();
+    //https://job-boards.greenhouse.io/
+  } else if (host.includes('greenhouse.io') && on('greenhouse')) {
+    window.attachGreenhouseSubmit();
+  } else if (host.includes('vector') && on('vector')) {
+    window.attachVectorSubmit();
+  }
+});

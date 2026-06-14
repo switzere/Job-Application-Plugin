@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Settings - Job Application Recorder</title>
+  <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+  <div class="header">
+    <h1>Settings</h1>
+    <div class="button-container">
+      <button id="backToGraphs" class="icon-button" title="Back to Dashboard">
+        <img src="icons/graph.png" alt="Back to Dashboard" />
+      </button>
+    </div>
+  </div>
+
+  <main class="settings-container">
+    <section class="settings-card">
+      <h2>Autofill Profile</h2>
+      <p class="settings-help">These values will be used when autofill is enabled on supported job application pages.</p>
+
+      <div class="settings-grid">
+        <label for="firstName">First Name</label>
+        <input id="firstName" type="text" autocomplete="given-name">
+
+        <label for="lastName">Last Name</label>
+        <input id="lastName" type="text" autocomplete="family-name">
+
+        <label for="email">Email</label>
+        <input id="email" type="email" autocomplete="email">
+
+        <label for="phone">Phone</label>
+        <input id="phone" type="tel" autocomplete="tel">
+
+        <label for="city">City</label>
+        <input id="city" type="text" autocomplete="address-level2">
+
+        <label for="linkedin">LinkedIn URL</label>
+        <input id="linkedin" type="url" placeholder="https://www.linkedin.com/in/yourname">
+
+        <label for="github">GitHub URL</label>
+        <input id="github" type="url" placeholder="https://github.com/yourname">
+
+        <label for="portfolio">Portfolio URL</label>
+        <input id="portfolio" type="url" placeholder="https://your-portfolio.com">
+
+        <label for="currentCompany">Current Company</label>
+        <input id="currentCompany" type="text">
+
+        <label for="headline">Professional Headline</label>
+        <input id="headline" type="text" placeholder="Data Analyst, ML Engineer, etc.">
+
+        <label for="summary">Short Summary</label>
+        <textarea id="summary" rows="4" placeholder="Brief intro used for application text fields."></textarea>
+      </div>
+
+      <div class="settings-actions">
+        <button id="saveSettings" class="confirmButton">Save Settings</button>
+        <button id="clearSettings" class="secondaryButton">Clear Settings</button>
+      </div>
+
+      <p id="settingsStatus" class="settings-status" aria-live="polite"></p>
+    </section>
+
+    <section class="settings-card">
+      <h2>Site Tracking</h2>
+      <p class="settings-help">Enable or disable job tracking on specific sites.</p>
+
+      <div class="toggle-list">
+        <label class="toggle-row">
+          <span>LinkedIn</span>
+          <input type="checkbox" id="toggle-linkedin" checked>
+        </label>
+        <label class="toggle-row">
+          <span>Indeed</span>
+          <input type="checkbox" id="toggle-indeed" checked>
+        </label>
+        <label class="toggle-row">
+          <span>Workday</span>
+          <input type="checkbox" id="toggle-workday" checked>
+        </label>
+        <label class="toggle-row">
+          <span>Monster</span>
+          <input type="checkbox" id="toggle-monster" checked>
+        </label>
+        <label class="toggle-row">
+          <span>Glassdoor</span>
+          <input type="checkbox" id="toggle-glassdoor" checked>
+        </label>
+        <label class="toggle-row">
+          <span>Lever</span>
+          <input type="checkbox" id="toggle-lever" checked>
+        </label>
+        <label class="toggle-row">
+          <span>Greenhouse</span>
+          <input type="checkbox" id="toggle-greenhouse" checked>
+        </label>
+        <label class="toggle-row">
+          <span>Vector</span>
+          <input type="checkbox" id="toggle-vector" checked>
+        </label>
+      </div>
+
+      <div class="settings-actions">
+        <button id="saveSiteToggles" class="confirmButton">Save</button>
+      </div>
+      <p id="toggleStatus" class="settings-status" aria-live="polite"></p>
+    </section>
+  </main>
+
+  <script src="settings.js"></script>
+</body>
+</html>

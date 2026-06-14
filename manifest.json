@@ -34,7 +34,8 @@
 				"https://jobs.lever.co/*",
 				"https://boards.greenhouse.io/*",
 				"https://talenthub.vectorinstitute.ai/*",
-				"https://smartapply.indeed.com/*"
+				"https://smartapply.indeed.com/*",
+				"https://job-boards.greenhouse.io/*"
 			],
 			"js": [
 				"extractors/linkedin.js",

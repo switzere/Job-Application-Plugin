@@ -6,6 +6,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const refreshButton = document.getElementById('refreshButton');
   const toggleDeletedJobsButton = document.getElementById('toggleDeletedJobsButton');
   const deletedJobsContainer = document.getElementById('deletedJobsContainer');
+
+  document.getElementById('settingsButton').addEventListener('click', () => {
+    window.open('settings.html', '_blank');
+  });
   const jobChartCanvas = document.getElementById('jobChart').getContext('2d');
   const dateChartCanvas = document.getElementById('dateChart').getContext('2d');
   const sourceChartCanvas = document.getElementById('sourceChart').getContext('2d');
