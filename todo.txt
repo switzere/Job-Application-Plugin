@@ -23,3 +23,423 @@ ultipro
 https://recruiting.ultipro.ca/ATL5003ALPK/JobBoard/77a570b3-57a8-4408-8e2f-50e6ebfb4deb/OpportunityDetail?opportunityId=68c27a02-e0c7-4172-8a7f-c12ebee1308a&source=LinkedIn
 
 jobbank
+
+
+
+
+
+If you're already attaching to submit buttons on platforms like LinkedIn, Indeed, Workday, Greenhouse, etc., there are generally **three approaches** to autofilling applications, ranging from simple to sophisticated.
+
+## Option 1: Site-Specific Mappings (Most Reliable)
+
+For each ATS/job board, write a dedicated autofill function:
+
+```js
+function autofillLinkedIn(profile) {
+  document.querySelector('input[name="firstName"]')?.value =
+    profile.firstName;
+
+  document.querySelector('input[name="lastName"]')?.value =
+    profile.lastName;
+
+  document.querySelector('input[name="emailAddress"]')?.value =
+    profile.email;
+}
+```
+
+Then:
+
+```js
+const { profile } = await chrome.storage.local.get('profile');
+
+if (host.includes('linkedin.com')) {
+  autofillLinkedIn(profile);
+}
+```
+
+### Pros
+
+* Very accurate
+* Easy to handle weird edge cases
+* Works with React forms
+
+### Cons
+
+* You must maintain selectors for every platform
+
+---
+
+## Option 2: Generic Field Matching
+
+Create a dictionary of profile fields:
+
+```js
+const mappings = {
+  firstName: profile.firstName,
+  lastName: profile.lastName,
+  email: profile.email,
+  phone: profile.phone,
+  city: profile.city,
+  linkedin: profile.linkedin,
+  github: profile.github,
+  portfolio: profile.portfolio
+};
+```
+
+Loop through all inputs:
+
+```js
+document.querySelectorAll('input, textarea').forEach(field => {
+  const text = [
+    field.name,
+    field.id,
+    field.placeholder,
+    field.getAttribute('aria-label')
+  ]
+    .filter(Boolean)
+    .join(' ')
+    .toLowerCase();
+
+  if (text.includes('first name')) {
+    setValue(field, profile.firstName);
+  }
+
+  if (text.includes('email')) {
+    setValue(field, profile.email);
+  }
+});
+```
+
+Where:
+
+```js
+function setValue(el, value) {
+  el.focus();
+  el.value = value;
+
+  el.dispatchEvent(new Event('input', { bubbles: true }));
+  el.dispatchEvent(new Event('change', { bubbles: true }));
+}
+```
+
+### Pros
+
+* Works across many ATS systems
+* Minimal maintenance
+
+### Cons
+
+* Less accurate
+* Can fill wrong fields
+
+---
+
+## Option 3: Hybrid (Recommended)
+
+Most successful job-application extensions use:
+
+1. Generic matching first.
+2. Site-specific overrides for major platforms.
+
+Example:
+
+```js
+if (host.includes('linkedin.com')) {
+  autofillLinkedIn(profile);
+} else if (host.includes('myworkdayjobs.com')) {
+  autofillWorkday(profile);
+} else {
+  genericAutofill(profile);
+}
+```
+
+This gives broad coverage while remaining reliable.
+
+---
+
+## Handling React/Vue/Angular Forms
+
+Many ATS systems use React-controlled inputs.
+
+This often **won't work**:
+
+```js
+input.value = 'John';
+```
+
+Instead:
+
+```js
+function setReactInput(input, value) {
+  const setter = Object.getOwnPropertyDescriptor(
+    HTMLInputElement.prototype,
+    'value'
+  ).set;
+
+  setter.call(input, value);
+
+  input.dispatchEvent(
+    new Event('input', { bubbles: true })
+  );
+}
+```
+
+This updates React state correctly.
+
+---
+
+## File Uploads (Resume)
+
+For resume uploads:
+
+```html
+<input type="file">
+```
+
+Chrome extensions cannot simply assign a path:
+
+```js
+input.value = 'resume.pdf'; // won't work
+```
+
+Instead, you can:
+
+1. Store the resume in extension storage.
+2. Fetch it as a Blob.
+3. Create a `File`.
+4. Use a `DataTransfer`.
+
+Example:
+
+```js
+const file = new File(
+  [blob],
+  'resume.pdf',
+  { type: 'application/pdf' }
+);
+
+const dt = new DataTransfer();
+dt.items.add(file);
+
+input.files = dt.files;
+
+input.dispatchEvent(
+  new Event('change', { bubbles: true })
+);
+```
+
+---
+
+## Multi-Step Applications
+
+Workday and Greenhouse commonly have:
+
+```
+Page 1: Contact Info
+Page 2: Experience
+Page 3: Questions
+Page 4: Review
+```
+
+Typical approach:
+
+```js
+const observer = new MutationObserver(() => {
+  autofillCurrentPage();
+});
+
+observer.observe(document.body, {
+  childList: true,
+  subtree: true
+});
+```
+
+Whenever a new step appears, re-run your autofill logic.
+
+---
+
+## AI-Assisted Mapping
+
+A more advanced approach:
+
+1. Extract labels:
+
+```js
+[
+  "First Name",
+  "Last Name",
+  "LinkedIn Profile",
+  "Current Employer",
+  "Years of Experience"
+]
+```
+
+2. Send them to an LLM.
+
+3. Get back:
+
+```json
+{
+  "First Name": "profile.firstName",
+  "Last Name": "profile.lastName",
+  "Current Employer": "profile.currentCompany"
+}
+```
+
+4. Fill automatically.
+
+This handles hundreds of ATS variants without hardcoding selectors.
+
+---
+
+For a Chrome extension targeting LinkedIn, Indeed, Workday, Greenhouse, Lever, Monster, and Glassdoor, I'd recommend:
+
+* A **generic field matcher** as the baseline.
+* **Platform-specific adapters** for LinkedIn, Workday, Greenhouse, and Lever.
+* A **MutationObserver** for multi-step forms.
+* A React-safe `setValue()` helper.
+
+That's essentially the architecture used by most modern job application autofill extensions.
+
+
+
+
+Yes, assuming that code runs whenever your content script loads.
+
+For example:
+
+```js
+const host = window.location.hostname;
+
+const { profile } = await chrome.storage.local.get('profile');
+
+if (host.includes('linkedin.com')) {
+  autofillLinkedIn(profile);
+}
+```
+
+When a LinkedIn application page loads, your content script executes, retrieves the profile, and fills the form.
+
+### Traditional page navigation
+
+If clicking "Next" causes a full page load:
+
+```
+Page 1 -> reload
+Page 2 -> reload
+Page 3 -> reload
+```
+
+then Chrome injects your content script again, so your autofill code runs again automatically.
+
+### Single Page Applications (SPA)
+
+Many modern job boards (especially LinkedIn, Workday, and some Greenhouse implementations) don't do full page reloads.
+
+Instead:
+
+```
+Page 1
+   ↓
+DOM changes
+   ↓
+Page 2
+```
+
+The URL might change, but the page never reloads.
+
+In that case, your content script only runs once, and this won't happen automatically:
+
+```js
+autofillLinkedIn(profile);
+```
+
+You need to detect when new form elements appear.
+
+A common approach is:
+
+```js
+function autofillCurrentPage() {
+  chrome.storage.local.get('profile', ({ profile }) => {
+    autofillLinkedIn(profile);
+  });
+}
+
+autofillCurrentPage();
+
+const observer = new MutationObserver(() => {
+  autofillCurrentPage();
+});
+
+observer.observe(document.body, {
+  childList: true,
+  subtree: true
+});
+```
+
+### A better pattern
+
+Don't re-fill the entire page every time the DOM changes. Instead:
+
+```js
+function autofillCurrentPage(profile) {
+  document
+    .querySelectorAll('input:not([data-autofilled])')
+    .forEach(input => {
+      // determine field type
+      // fill value
+
+      input.dataset.autofilled = 'true';
+    });
+}
+```
+
+This prevents repeatedly overwriting fields the user edits.
+
+### How LinkedIn behaves
+
+LinkedIn Easy Apply is usually a modal dialog that stays on the same page while moving through steps.
+
+So:
+
+```text
+Jobs page
+  ↓
+Easy Apply modal
+  ↓
+Step 1
+  ↓
+Step 2
+  ↓
+Step 3
+```
+
+often means **no page reloads at all**. A `MutationObserver` is usually necessary if you want autofill to continue as new steps appear.
+
+### What I'd do in your extension
+
+Since you're already attaching site-specific handlers:
+
+```js
+if (host.includes('linkedin.com')) {
+  window.attachLinkedInSubmit();
+}
+```
+
+I'd add:
+
+```js
+if (host.includes('linkedin.com')) {
+  window.attachLinkedInAutofill();
+  window.attachLinkedInSubmit();
+}
+```
+
+where `attachLinkedInAutofill()`:
+
+1. Loads the profile from storage.
+2. Fills visible fields immediately.
+3. Starts a `MutationObserver`.
+4. Fills newly-added fields when the user advances to the next step.
+
+That architecture works well for LinkedIn, Workday, Lever, and Greenhouse because they all rely heavily on dynamic forms rather than full page reloads.

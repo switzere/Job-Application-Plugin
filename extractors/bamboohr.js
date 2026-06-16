@@ -1,14 +1,19 @@
-function extractLinkedInDetails() {
-    // TODO: Implement extraction logic for LinkedIn
-    const jobTitleElement = document.querySelector('.job-details-jobs-unified-top-card__job-title h1 a');
+function extractBambooHRDetails() {
+    // TODO: Implement extraction logic for BambooHR
+    const jobTitleElement = document.querySelector('[data-fabric-component="Headline"]');
     const jobTitle = jobTitleElement ? jobTitleElement.innerText : 'Job Title Not Found';
     
     // Extract company information from the second span element within the div with class "ia-JobHeader-information"
-    const companyInfoElement = document.querySelector('.job-details-jobs-unified-top-card__company-name');
-    const companyInfo = companyInfoElement ? companyInfoElement.innerText : 'Company Info Not Found';
+    // https://inuvialuit.bamboohr.com/careers/351 get company name from url
+    // <div class="fabric-95l02p-description">IRC - Nanilavut Initiative - Inuvik, Northwest Territories</div>
+    // company name and location
+    const urlParts = window.location.href.split('/');
+    const companyFromUrl = urlParts.length > 2 ? urlParts[2] : 'Company Info Not Found';
+    const companyNameFromUrl = companyFromUrl.split('.')[0]; // Get the first part before any dot
+    const companyInfo = companyNameFromUrl ? companyNameFromUrl : 'Company Info Not Found';
 
     // Job Posting info ia-JobDescription
-    const jobDescriptionElement = document.querySelector('#job-details');
+    const jobDescriptionElement = document.querySelector('.BambooRichText');
     const jobDescription = jobDescriptionElement ? jobDescriptionElement.innerHTML : 'Job Description Not Found';
     const jobDescRaw = jobDescriptionElement ? jobDescriptionElement.innerText : 'Job Description Not Found';
 
@@ -26,38 +31,29 @@ function extractLinkedInDetails() {
         url: window.location.href,
         jobDescription: jobDescription,
         jobDescRaw: jobDescRaw,
-        postingSource: 'LinkedIn',
+        postingSource: 'BambooHR',
         locationInfo: locationInfo,
         postDate: postDate
       };
 }
 
-function attachLinkedInSubmit(){
+function attachBambooHRSubmit(){
     let lastUrl = location.href;
 
     function attach() {
+        // submit button: data-bi-id="careers-site-apply-button"
         const btns = document.querySelectorAll(
-            'button[role="link"][aria-label^="Apply to"][data-live-test-job-apply-button], ' +
-            'button[aria-label="Submit application"]'
+            'button[data-bi-id="careers-site-apply-button"]'
         );
-        //https://www.linkedin.com/jobs/view/4335137444/?trk=eml-email_job_alert_digest_01-primary_job_list-0-jobcard_body_14597860204&refId=MgQAI%2F0FGo20ppO3ypPCTw%3D%3D&trackingId=GZHv2StEwHQ00jaRbTs1oA%3D%3D
-        //job links like this seem to be all dynamic so it can't find anything unless I webscrape based on words not html
 
         for (const btn of btns) {
             if (btn && !btn.dataset.jobRecorderAttached) {
                 btn.dataset.jobRecorderAttached = "true";
                 btn.addEventListener('click', () => {
-                    setTimeout(() => {
-                    const job = extractLinkedInDetails();
-                    
-                    //const toggleLI = chrome.storage.local.get(PROFILE_KEY).then(result => result[PROFILE_KEY])
-                    //might want to use this as currently need to refresh the page for settings to work, but that is such a minor issue.
 
-                    // const toggleLinkedIn = document.querySelector('#toggle-linkedin');
-                    // if (job && toggleLinkedIn && toggleLinkedIn.checked) {
-
+                    const job = extractBambooHRDetails();
                     if (job ) sendJobApplication(job);
-                    }, 1000);
+
                 });
             }
         }
@@ -81,6 +77,6 @@ function attachLinkedInSubmit(){
     urlObserver.observe(document.body, { childList: true, subtree: true });
 }
 
-window.extractLinkedInDetails = extractLinkedInDetails;
+window.extractBambooHRDetails = extractBambooHRDetails;
 
-window.attachLinkedInSubmit = attachLinkedInSubmit;
+window.attachBambooHRSubmit = attachBambooHRSubmit;

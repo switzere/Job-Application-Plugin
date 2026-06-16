@@ -97,6 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   document.getElementById('backToGraphs').addEventListener('click', () => {
-    window.open('page.html', '_blank');
+    //window.open('page.html', '_blank');
+    window.location.replace('page.html');
   });
 });

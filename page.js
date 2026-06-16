@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const deletedJobsContainer = document.getElementById('deletedJobsContainer');
 
   document.getElementById('settingsButton').addEventListener('click', () => {
-    window.open('settings.html', '_blank');
+    window.location.replace('settings.html');
   });
   const jobChartCanvas = document.getElementById('jobChart').getContext('2d');
   const dateChartCanvas = document.getElementById('dateChart').getContext('2d');

@@ -121,5 +121,7 @@ chrome.storage.local.get(['siteToggles'], ({ siteToggles = {} }) => {
     window.attachGreenhouseSubmit();
   } else if (host.includes('vector') && on('vector')) {
     window.attachVectorSubmit();
+  } else if (host.includes('bamboohr') && on('bamboohr')) {
+    window.attachBambooHRSubmit();
   }
 });
