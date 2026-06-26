@@ -15,7 +15,7 @@ function extractGreenhouseDetails() {
   const postDateElement = document.querySelector('.application--post-date');
   const postDate = postDateElement ? postDateElement.innerText : 'Post Date Not Found';
 
-  const jobDescriptionElement = document.querySelector('.job__description body');
+  const jobDescriptionElement = document.querySelector('.job__description');
   const jobDescription = jobDescriptionElement ? jobDescriptionElement.innerHTML : 'Job Description Not Found';
   const jobDescRaw = jobDescriptionElement ? jobDescriptionElement.innerText : 'Job Description Not Found';
   
