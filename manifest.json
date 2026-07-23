@@ -39,6 +39,7 @@
 				"*://*.bamboohr.com/*"
 			],
 			"js": [
+				"libs/keyword.bundle.js",
 				"extractors/linkedin.js",
 				"extractors/indeed.js",
 				"extractors/workday.js",

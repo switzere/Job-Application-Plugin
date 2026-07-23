@@ -91,6 +91,20 @@ function sendJobApplication(job) {
   //print job details
   showJobPopup(job);
   console.log('Job Application Details:', job);
+  try {
+    const desc = job.jobDescRaw || document.body.innerText || '';
+    if (window.parseKeywords) {
+      job.keywords = window.parseKeywords(desc, 30);
+    } else if (window.extractKeywords) {
+      job.keywords = window.extractKeywords(desc, 8);
+    } else {
+      job.keywords = [];
+    }
+  } catch (e) {
+    console.warn('Keyword extraction failed', e);
+    job.keywords = [];
+  }
+
   chrome.runtime.sendMessage({ type: 'newJobApp', job });
 
 }
