@@ -90,6 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <td>
             <button class="details-button" data-index="${index}">Details</button>
             <button class="delete-button" data-index="${index}">Delete</button>
+            <button class="copy-button" data-index="${index}">Copy</button>
           </td>
         `;
         tbody.appendChild(row);
@@ -106,11 +107,16 @@ document.addEventListener('DOMContentLoaded', () => {
       // Add event listeners to delete buttons
       document.querySelectorAll('.delete-button').forEach(button => {
         button.addEventListener('click', handleDeleteRow);
+      });
 
               // Add event listeners to details buttons
       document.querySelectorAll('.details-button').forEach(button => {
         button.addEventListener('click', handleDetailsButton);
       });
+
+      // Add event listeners to copy buttons
+      document.querySelectorAll('.copy-button').forEach(button => {
+        button.addEventListener('click', handleCopyButton);
       });
     }
   }
@@ -152,6 +158,24 @@ document.addEventListener('DOMContentLoaded', () => {
         createDateChart(details); // Refresh the date chart
         createSourceChart(details); // Refresh the source chart
         updateCounts(details); // Update counts
+      });
+    });
+  }
+
+  function handleCopyButton(event) {
+    const button = event.target;
+    const rowIndex = button.getAttribute('data-index');
+
+    chrome.storage.local.get(['jobDetails'], (result) => {
+      const details = result.jobDetails || [];
+      const jobDetail = details[rowIndex];
+
+      // Copy the jobDetail to the clipboard
+      const jobDetailString = JSON.stringify(jobDetail, null, 2);
+      navigator.clipboard.writeText(jobDetailString).then(() => {
+        //console.log('Job detail copied to clipboard');
+      }).catch(err => {
+        console.error('Could not copy job detail: ', err);
       });
     });
   }
