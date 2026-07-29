@@ -1,14 +1,30 @@
 function extractLinkedInDetails() {
     // TODO: Implement extraction logic for LinkedIn
-    const jobTitleElement = document.querySelector('.job-details-jobs-unified-top-card__job-title h1 a');
+    let jobTitleElement = document.querySelector('.job-details-jobs-unified-top-card__job-title h1 a');
+    let divs = [];
+    if (!jobTitleElement) {
+        divs = Array.from(document.querySelectorAll('div'))
+        jobTitleElement = document.querySelector('a[href*="/jobs/view/"]');
+    }
     const jobTitle = jobTitleElement ? jobTitleElement.innerText : 'Job Title Not Found';
     
     // Extract company information from the second span element within the div with class "ia-JobHeader-information"
-    const companyInfoElement = document.querySelector('.job-details-jobs-unified-top-card__company-name');
-    const companyInfo = companyInfoElement ? companyInfoElement.innerText : 'Company Info Not Found';
+    let companyInfoElement = document.querySelector('.job-details-jobs-unified-top-card__company-name');
+    let companyInfo;
+    if (!companyInfoElement) {
+        const label = document.querySelector('div[aria-label^="Company,"]').getAttribute('aria-label') || '';
+        companyInfo = label.split(',')[1]?.trim().replace(/[.]+$/, '') || null;
+    }
+    else {
+        companyInfo = companyInfoElement ? companyInfoElement.innerText : 'Company Info Not Found';
+    }
 
     // Job Posting info ia-JobDescription
-    const jobDescriptionElement = document.querySelector('#job-details');
+    let jobDescriptionElement = document.querySelector('#job-details');
+    if (!jobDescriptionElement) {
+        const jobDesc = divs.find(d => d.textContent && d.textContent.trim() === 'About the job');
+        jobDescriptionElement = jobDesc ? jobDesc.parentElement : null;
+    }
     const jobDescription = jobDescriptionElement ? jobDescriptionElement.innerHTML : 'Job Description Not Found';
     const jobDescRaw = jobDescriptionElement ? jobDescriptionElement.innerText : 'Job Description Not Found';
 
@@ -38,7 +54,9 @@ function attachLinkedInSubmit(){
     function attach() {
         const btns = document.querySelectorAll(
             'button[role="link"][aria-label^="Apply to"][data-live-test-job-apply-button], ' +
-            'button[aria-label="Submit application"]'
+            'button[aria-label="Submit application"], ' +
+            'a[aria-label="Apply on company website"], ' +
+            'a[aria-label="Easy Apply to this job"]'
         );
         //https://www.linkedin.com/jobs/view/4335137444/?trk=eml-email_job_alert_digest_01-primary_job_list-0-jobcard_body_14597860204&refId=MgQAI%2F0FGo20ppO3ypPCTw%3D%3D&trackingId=GZHv2StEwHQ00jaRbTs1oA%3D%3D
         //job links like this seem to be all dynamic so it can't find anything unless I webscrape based on words not html
@@ -49,13 +67,6 @@ function attachLinkedInSubmit(){
                 btn.addEventListener('click', () => {
                     setTimeout(() => {
                     const job = extractLinkedInDetails();
-                    
-                    //const toggleLI = chrome.storage.local.get(PROFILE_KEY).then(result => result[PROFILE_KEY])
-                    //might want to use this as currently need to refresh the page for settings to work, but that is such a minor issue.
-
-                    // const toggleLinkedIn = document.querySelector('#toggle-linkedin');
-                    // if (job && toggleLinkedIn && toggleLinkedIn.checked) {
-
                     if (job ) sendJobApplication(job);
                     }, 1000);
                 });

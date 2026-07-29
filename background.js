@@ -25,6 +25,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       const jobDetails = result.jobDetails || [];
       // check if new job has the same job title and date as any of the other jobs
       
+      // could compare jobs and fill in missing info
       const isDuplicate = jobDetails.some(job => job.jobTitle === details.jobTitle
         && job.timestamp.slice(0,10) === details.timestamp.slice(0,10)
         && job.companyInfo === details.companyInfo);
