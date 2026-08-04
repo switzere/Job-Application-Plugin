@@ -1,7 +1,7 @@
 {
 	"manifest_version": 3,
 	"name": "Job Application Recorder",
-	"version": "1.3",
+	"version": "3.3",
 	"description": "Record and visualize job application details.",
 	"action": {
 		"default_popup": "popup.html",
@@ -15,7 +15,6 @@
 	"permissions": [
 		"activeTab",
 		"downloads",
-		"scripting",
 		"storage",
 		"contextMenus",
 		"windows",
